@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
+import { passwordVerifyPreProduction } from "./lib/actions/password";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
@@ -43,13 +44,10 @@ export async function proxy(request: NextRequest) {
 
   const preproductionPassword =
     request.cookies.get("preproduction")?.value ?? "";
-  const expectedPreproductionPassword =
-    process.env.NEXT_PUBLIC_PREPRODUCTION_PASSWORD ?? "";
 
-  if (process.env.NODE_ENV === "production") {
-    const verified = await Bun.password.verify(
-      preproductionPassword,
-      expectedPreproductionPassword,
+  if (process.env.NODE_ENV === "development") {
+    const verified = await passwordVerifyPreProduction(
+      preproductionPassword || "",
     );
 
     if (!verified) {

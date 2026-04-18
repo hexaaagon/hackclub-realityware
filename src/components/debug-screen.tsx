@@ -1,8 +1,8 @@
 "use client";
-import { useGetCookie } from "cookies-next/client";
+import { setCookie, useGetCookie } from "cookies-next/client";
 import { StoreProvider, useStoreState } from "easy-peasy";
-import { Send, SendHorizonal } from "lucide-react";
-import { DOMAttributes, useEffect, useState } from "react";
+import { SendHorizonal } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { passwordVerifyPreProduction } from "@/lib/actions/password";
 import { authClient } from "@/lib/auth/client";
@@ -44,7 +44,7 @@ export function StoredDebugScreen() {
     let cancelled = false;
 
     async function verifyPreproduction() {
-      if (process.env.NODE_ENV !== "production") return;
+      if (process.env.NODE_ENV !== "development") return;
 
       const preproductionPassword = getCookie("preproduction");
       const verified = await passwordVerifyPreProduction(
@@ -121,6 +121,10 @@ export function StoredDebugScreen() {
                           const verified =
                             await passwordVerifyPreProduction(debugPassword);
 
+                          setCookie("preproduction", debugPassword, {
+                            maxAge: 60 * 60 * 24 * 30, // 30 days
+                          });
+
                           return resolve(verified);
                         }),
                         {
@@ -128,6 +132,7 @@ export function StoredDebugScreen() {
                           success: (data) => {
                             if (data) {
                               setDebugState("loading");
+                              window.location.reload();
                               return "You're logged in!";
                             } else {
                               return "It's wrong bro.";
