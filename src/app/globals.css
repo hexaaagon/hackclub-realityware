@@ -6,13 +6,13 @@
 
 /* Brand palette — static values */
 @theme {
-  --color-orange: #FF551F;
-  --color-green: #0CB463;
-  --color-dark-blue: #3A5190;
-  --color-blue: #2DE1FC;
-  --color-yellow: #F0F757;
-  --color-gray: #BEC3C8;
-  --color-black: #1C1C1C;
+  --color-orange: #ff551f;
+  --color-green: #0cb463;
+  --color-dark-blue: #3a5190;
+  --color-blue: #2de1fc;
+  --color-yellow: #f0f757;
+  --color-gray: #bec3c8;
+  --color-black: #1c1c1c;
 }
 
 /* Semantic tokens — mapped from CSS variables set per theme */
@@ -22,6 +22,10 @@
   --font-mono: var(--font-geist-mono);
   --font-pixel-square: var(--font-geist-pixel-square);
   --font-sacco: var(--font-sacco);
+  --tracking-sacco: 0.02em;
+  --text-sacco-4xl: 2.25rem;
+  --text-sacco-4xl--line-height: 1;
+  --text-sacco-4xl--letter-spacing: 0.02em;
 
   /* Colors */
   --color-background: var(--background);
@@ -67,12 +71,26 @@
 
   /* Animations */
   @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto)); }
+    from {
+      height: 0;
+    }
+    to {
+      height: var(
+        --radix-accordion-content-height,
+        var(--accordion-panel-height, auto)
+      );
+    }
   }
   @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto)); }
-    to { height: 0; }
+    from {
+      height: var(
+        --radix-accordion-content-height,
+        var(--accordion-panel-height, auto)
+      );
+    }
+    to {
+      height: 0;
+    }
   }
 }
 
@@ -149,37 +167,63 @@
 
 /* Radix/shadcn data-state variants */
 @custom-variant data-open {
-  &:where([data-state="open"]), &:where([data-open]:not([data-open="false"])) { @slot; }
+  &:where([data-state="open"]),
+  &:where([data-open]:not([data-open="false"])) {
+    @slot;
+  }
 }
 @custom-variant data-closed {
-  &:where([data-state="closed"]), &:where([data-closed]:not([data-closed="false"])) { @slot; }
+  &:where([data-state="closed"]),
+  &:where([data-closed]:not([data-closed="false"])) {
+    @slot;
+  }
 }
 @custom-variant data-checked {
-  &:where([data-state="checked"]), &:where([data-checked]:not([data-checked="false"])) { @slot; }
+  &:where([data-state="checked"]),
+  &:where([data-checked]:not([data-checked="false"])) {
+    @slot;
+  }
 }
 @custom-variant data-unchecked {
-  &:where([data-state="unchecked"]), &:where([data-unchecked]:not([data-unchecked="false"])) { @slot; }
+  &:where([data-state="unchecked"]),
+  &:where([data-unchecked]:not([data-unchecked="false"])) {
+    @slot;
+  }
 }
 @custom-variant data-selected {
-  &:where([data-selected="true"]) { @slot; }
+  &:where([data-selected="true"]) {
+    @slot;
+  }
 }
 @custom-variant data-disabled {
-  &:where([data-disabled="true"]), &:where([data-disabled]:not([data-disabled="false"])) { @slot; }
+  &:where([data-disabled="true"]),
+  &:where([data-disabled]:not([data-disabled="false"])) {
+    @slot;
+  }
 }
 @custom-variant data-active {
-  &:where([data-state="active"]), &:where([data-active]:not([data-active="false"])) { @slot; }
+  &:where([data-state="active"]),
+  &:where([data-active]:not([data-active="false"])) {
+    @slot;
+  }
 }
 @custom-variant data-horizontal {
-  &:where([data-orientation="horizontal"]) { @slot; }
+  &:where([data-orientation="horizontal"]) {
+    @slot;
+  }
 }
 @custom-variant data-vertical {
-  &:where([data-orientation="vertical"]) { @slot; }
+  &:where([data-orientation="vertical"]) {
+    @slot;
+  }
 }
 
 @utility no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer base {

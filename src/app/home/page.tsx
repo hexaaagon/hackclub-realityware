@@ -150,7 +150,11 @@ export default function Home() {
         >
           <p className="text-2xl text-black">April 1st to June 1st (2026)</p>
           <HRule />
-          <img src="/realityware.svg" className="h-auto w-full" alt="wtf" />
+          <img
+            src="/static/images/realityware.svg"
+            className="h-auto w-full"
+            alt="wtf"
+          />
           <HRule />
           <p className="mb-4 font-bold text-3xl leading-8">
             Ship a solution to a real problem, earn prizes.
@@ -188,7 +192,7 @@ export default function Home() {
           </p>
         </div>
         <img
-          src="/graffiti.svg"
+          src="/static/images/graffiti.svg"
           className="-bottom-1/2 absolute right-0 h-100 w-auto"
           alt=""
         />

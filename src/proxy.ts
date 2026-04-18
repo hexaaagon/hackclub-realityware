@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
   const preproductionPassword =
     request.cookies.get("preproduction")?.value ?? "";
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV !== "development") {
     const verified = await passwordVerifyPreProduction(
       preproductionPassword || "",
     );

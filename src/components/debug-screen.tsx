@@ -21,6 +21,8 @@ export function StoredDebugScreen() {
   const [debugState, setDebugState] = useState<
     | "loading"
     | "preproduction-password-required"
+    | "development-not-logged-in"
+    | "development-logged-in"
     | "not-logged-in"
     | "logged-in"
   >("loading");
@@ -40,11 +42,15 @@ export function StoredDebugScreen() {
   const user = authClient.useSession();
 
   // Run preproduction check in an effect (not during render)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: idk vro
   useEffect(() => {
     let cancelled = false;
 
     async function verifyPreproduction() {
-      if (process.env.NODE_ENV !== "development") return;
+      if (process.env.NODE_ENV === "development") {
+        setDebugState("development-not-logged-in");
+        return;
+      }
 
       const preproductionPassword = getCookie("preproduction");
       const verified = await passwordVerifyPreProduction(
@@ -70,10 +76,12 @@ export function StoredDebugScreen() {
     if (debugState === "preproduction-password-required") return;
 
     if (!user.isPending && debugState === "loading") {
-      if (user.data) {
-        setDebugState("logged-in");
+      if (process.env.NODE_ENV === "development") {
+        setDebugState(
+          user.data ? "development-logged-in" : "development-not-logged-in",
+        );
       } else {
-        setDebugState("not-logged-in");
+        setDebugState(user.data ? "logged-in" : "not-logged-in");
       }
     }
   }, [debugState, user.isPending, user.data]);
@@ -148,7 +156,8 @@ export function StoredDebugScreen() {
                 </div>
               </>
             )}
-            {debugState === "not-logged-in" && (
+            {(debugState === "not-logged-in" ||
+              debugState === "development-not-logged-in") && (
               <>
                 <button
                   className="cursor-pointer text-blue-300"

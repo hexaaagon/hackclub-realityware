@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 const sacco = localFont({
-  src: "../../public/fonts/Sacco-SemiBoldCondensed.ttf",
+  src: "../../public/static/fonts/Sacco-SemiBoldCondensed.ttf",
   variable: "--font-sacco",
   declarations: [
     { prop: "ascent-override", value: "90%" },
