@@ -38,27 +38,6 @@ export const createClient = (request: NextRequest) => {
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  if (pathname === "/coming-soon" || pathname === "/home") {
-    return NextResponse.next();
-  }
-
-  const preproductionPassword =
-    request.cookies.get("preproduction")?.value ?? "";
-
-  if (process.env.NODE_ENV !== "development") {
-    const verified = await passwordVerifyPreProduction(
-      preproductionPassword || "",
-    );
-
-    if (!verified) {
-      if (pathname === "/") {
-        return NextResponse.rewrite(new URL("/coming-soon", request.url));
-      }
-
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
   const sessionCookie = getSessionCookie(request);
 
   if (!sessionCookie) {

@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Script from "next/script";
-import { DebugScreen } from "@/components/debug-screen";
+import { ReactScan } from "@/components/react-scan";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
@@ -40,27 +40,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} font-pixel-square antialiased`}
       >
-        <div
-          aria-hidden
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.3'/%3E%3C/svg%3E")`,
-            backgroundRepeat: "repeat",
-            pointerEvents: "none",
-            zIndex: 9999,
-          }}
-        />
-        <DebugScreen />
+        <ReactScan />
         <Toaster />
-
-        {/*process.env.NODE_ENV === "development" && (
-          <script src="https://unpkg.com/react-scan/dist/auto.global.js" crossOrigin="anonymous" />
-        )*/}
-        <Script
-          src="https://unpkg.com/react-scan/dist/auto.global.js"
-          crossOrigin="anonymous"
-        />
         {children}
       </body>
     </html>
