@@ -78,7 +78,7 @@ function HRule({
 }
 
 export default function Home() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<number>(0);
   const [email, setEmail] = useState("");
 
   return (
@@ -101,7 +101,7 @@ export default function Home() {
         <div className="relative overflow-hidden border-2 border-black/20 bg-background font-sans tracking-tight">
           <div
             aria-hidden
-            className="*:-ml-20 pointer-events-none absolute inset-y-0 hidden border-black/20 border-l-2 leading-20 *:text-black/40 md:block"
+            className="*:-ml-20 pointer-events-none absolute inset-y-0 hidden border-black/20 border-l-2 leading-20 *:text-black/40 lg:block"
             style={{
               width: `calc(100% - ${RAILING_LEFT_OFFSET * 2}px)`,
               left: "50%",
@@ -114,7 +114,7 @@ export default function Home() {
           </div>
 
           <header className="relative flex min-h-40 w-full items-center justify-around">
-            <div className="absolute left-0 flex h-full w-full flex-col gap-2 border-black/20 bg-background p-4 pr-24 [@media(width>=1480px)]:max-w-[calc(2/12*100%)] [@media(width>=1480px)]:border-r-2">
+            <div className="absolute left-0 flex h-full w-full flex-col gap-2 border-black/20 bg-background p-4 pr-24 [@media(width>=2048px)]:max-w-[calc(2/12*100%)] [@media(width>=1410px)]:max-w-[calc(3/12*100%)] [@media(width>=1410px)]:border-r-2">
               <div className="flex items-center gap-2">
                 <Image
                   src={HackClubLogo}
@@ -132,42 +132,42 @@ export default function Home() {
                 <span>A Hack Club</span>
                 <span>&amp; Depot17 Event</span>
               </div>
-              <div className="mt-auto flex flex-col items-start text-sm sm:mt-0 sm:hidden">
+              <div className="mt-auto flex flex-col items-start text-sm sm:mt-0 lg:hidden">
                 {happening}
               </div>
             </div>
-            <div className="absolute right-0 ml-auto flex h-full w-full flex-row gap-2 border-black/20 [@media(width>=1085px)]:max-w-[calc(2/12*100%)] [@media(width>=1085px)]:border-l-2">
+            <div className="absolute right-0 ml-auto flex h-full w-full flex-row gap-2 border-black/20 [@media(width>=1410px)]:max-w-[calc(2/12*100%)] [@media(width>=1410px)]:border-l-2">
               <svg
                 width={186 * 1.2}
                 height={197 * 1.2}
-                viewBox="0 0 186 197"
+                viewBox="0 0 164 197"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="-top-0.5 -right-0.5 absolute h-[calc(186px*0.88)] w-[calc(197px*0.88)] [@media(width>=1535px)]:h-[calc(186px*1.28)] [@media(width>=1535px)]:w-[calc(197px*1.28)]"
+                className="-top-0.5 -right-0.5 absolute h-[calc(186px*0.88)] w-[calc(197px*0.88)] [@media(width>=2048px)]:h-[calc(186px*1.1)] [@media(width>=2048px)]:w-[calc(197px*1.1)]"
               >
                 <path
                   d="M149 103C149 133.928 123.928 159 93 159C62.0721 159 37 133.928 37 103M149 103V1H37V31.001V103M149 103H93H37M149 103L185 104M37 103H1M185 104C185 154.81 143.81 196 93 196C42.1898 196 1 153.81 1 103M185 104V1H1V103M1 103V196"
                   stroke="#BEC3C8"
-                  className="stroke-2 [@media(width>=1414px)]:stroke-[1.5]"
+                  className="stroke-2 [@media(width>=2048px)]:stroke-[1.5]"
                 />
               </svg>
             </div>
           </header>
 
           <section className="relative border-black/20 border-t-2">
-            <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] pt-8 pb-20 md:max-w-[calc(8/12*100%+3px)] [@media(width>=1085px)]:border-x-2">
-              <p className="line-clamp-1 hidden max-w-full truncate text-right text-2xl text-black tracking-tighter sm:block">
+            <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] pt-2 pb-20 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
+              <p className="line-clamp-1 hidden max-w-full truncate text-right text-lg text-black tracking-tighter lg:block">
                 {happening}
               </p>
-              <HRule className="my-2 hidden sm:block" />
-              <div className="flex w-full items-center justify-center">
+              <HRule className="mt-1 mb-2 hidden lg:block" />
+              <div className="flex w-full items-center justify-center mt-5 lg:mt-0">
                 <Image
                   src={RealitywareFullText}
                   className="h-auto w-full"
                   alt="Realityware"
                 />
               </div>
-              <HRule className="mt-2 hidden sm:block" />
+              <HRule className="mt-2 hidden lg:block" />
               <p className="mt-4 mb-4 font-semibold text-3xl leading-8">
                 Ship a solution to a real problem, earn prizes.
               </p>
@@ -192,7 +192,7 @@ export default function Home() {
                     placeholder="orpheus@hackclub.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-full w-full bg-transparent text-md placeholder-black/35 outline-none sm:w-80"
+                    className="h-full w-full bg-transparent text-md placeholder-black/35 outline-none"
                   />
                 </div>
                 <button
@@ -214,7 +214,7 @@ export default function Home() {
           </section>
 
           <section className="-mt-px relative border-black/20 border-t-2">
-            <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] pt-2 md:max-w-[calc(8/12*100%+3px)] [@media(width>=1085px)]:border-x-2">
+            <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] pt-2 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
               <div className="flex items-center gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black bg-white text-base">
                   01
@@ -234,7 +234,7 @@ export default function Home() {
           </section>
 
           <section className="-mt-px relative border-black/20 border-t-2">
-            <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] py-2 md:max-w-[calc(8/12*100%+3px)] [@media(width>=1085px)]:border-x-2">
+            <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] py-2 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
               <div className="flex items-center gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black bg-white text-base">
                   02
@@ -254,7 +254,7 @@ export default function Home() {
                   >
                     <button
                       className="flex w-full items-center justify-between gap-2 px-4 py-3 text-left font-medium font-medium text-xl transition-colors hover:bg-black/5"
-                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                      onClick={() => setOpenFaq(i)}
                     >
                       <span>{faq.q}</span>
                     </button>
@@ -278,7 +278,7 @@ export default function Home() {
             </div>
           </section>
           <section className="-mt-px relative border-black/20 border-y-2">
-            <div className="relative mx-auto w-full border-black/20 px-2 pt-4 pb-2 md:max-w-[calc(8/12*100%+3px)] [@media(width>=1085px)]:border-x-2">
+            <div className="relative mx-auto w-full border-black/20 px-2 pt-4 pb-2 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
               <p className="text-right font-semibold text-lg leading-6">
                 MORE QUESTIONS? <br />
                 ASK IN{" "}
