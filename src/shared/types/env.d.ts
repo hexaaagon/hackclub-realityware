@@ -24,9 +24,6 @@ declare global {
       HCA_CLIENT_ID: string;
       HCA_CLIENT_SECRET: string;
 
-      // Pre-Production Password
-      NEXT_PUBLIC_PREPRODUCTION_PASSWORD: string;
-
       // Vercel-provided system vars
       NEXT_PUBLIC_VERCEL_ENV: "production" | "preview" | "development";
       NEXT_PUBLIC_VERCEL_TARGET_ENV: string;

@@ -114,7 +114,7 @@ export default function Home() {
           </div>
 
           <header className="relative flex min-h-40 w-full items-center justify-around">
-            <div className="absolute left-0 flex h-full w-full flex-col gap-2 border-black/20 bg-background p-4 pr-24 [@media(width>=2048px)]:max-w-[calc(2/12*100%)] [@media(width>=1410px)]:max-w-[calc(3/12*100%)] [@media(width>=1410px)]:border-r-2">
+            <div className="absolute left-0 flex h-full w-full flex-col gap-2 border-black/20 bg-background p-4 pr-24 [@media(width>=1410px)]:max-w-[calc(3/12*100%)] [@media(width>=1410px)]:border-r-2 [@media(width>=2048px)]:max-w-[calc(2/12*100%)]">
               <div className="flex items-center gap-2">
                 <Image
                   src={HackClubLogo}
@@ -156,11 +156,11 @@ export default function Home() {
 
           <section className="relative border-black/20 border-t-2">
             <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] pt-2 pb-20 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
-              <p className="line-clamp-1 hidden max-w-full truncate text-right text-lg text-black tracking-tighter lg:block">
+              <p className="line-clamp-1 hidden max-w-full truncate text-right text-black text-lg tracking-tighter lg:block">
                 {happening}
               </p>
               <HRule className="mt-1 mb-2 hidden lg:block" />
-              <div className="flex w-full items-center justify-center mt-5 lg:mt-0">
+              <div className="mt-5 flex w-full items-center justify-center lg:mt-0">
                 <Image
                   src={RealitywareFullText}
                   className="h-auto w-full"
