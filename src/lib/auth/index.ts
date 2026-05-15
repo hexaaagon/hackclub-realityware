@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { createAuthMiddleware } from "better-auth/api";
+import { APIError, createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { genericOAuth } from "better-auth/plugins";
 import { env } from "@/env";
@@ -8,6 +8,7 @@ import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema/auth";
 
 export const auth = betterAuth({
+  baseURL: env.NEXT_PUBLIC_APP_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
@@ -107,6 +108,36 @@ export const auth = betterAuth({
     nextCookies(),
   ],
   hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      // Store request path for error tracking
+      if (ctx.context.responseHeaders) {
+        ctx.context.responseHeaders.set("X-Auth-Path", ctx.path);
+      }
+
+      if (ctx.path === "/sign-in/oauth2") {
+        console.log(ctx.body);
+
+        const { login_hint: loginHint } = ctx.body.additionalData;
+        if (!loginHint || typeof loginHint !== "string") {
+          throw new APIError("BAD_REQUEST", {
+            message: "Missing or invalid login_hint",
+          });
+        }
+
+        if (env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED) {
+          if ((loginHint || "").startsWith(env.SIGNUP_ACCESS_BYPASS_PREFIX)) {
+            ctx.body.login_hint = loginHint.replace(
+              env.SIGNUP_ACCESS_BYPASS_PREFIX,
+              "",
+            );
+          } else {
+            throw new APIError("UNAUTHORIZED", {
+              message: "what are u doing lil bro",
+            });
+          }
+        }
+      }
+    }),
     after: createAuthMiddleware(async (ctx) => {
       const newSession = ctx.context.newSession;
 
@@ -123,7 +154,7 @@ export const auth = betterAuth({
         userCreatedAt: user.createdAt?.toString() || "",
       };
 
-      if (ctx.path.startsWith("/callback/identity")) {
+      if (ctx.path.startsWith("/callback/hca")) {
         const isNewUser =
           newSession.session.createdAt.getTime() === user.createdAt.getTime();
         authEvent.eventType = isNewUser ? "user_signed_up" : "user_signed_in";
@@ -136,12 +167,6 @@ export const auth = betterAuth({
           "X-Auth-Event",
           JSON.stringify(authEvent),
         );
-      }
-    }),
-    before: createAuthMiddleware(async (ctx) => {
-      // Store request path for error tracking
-      if (ctx.context.responseHeaders) {
-        ctx.context.responseHeaders.set("X-Auth-Path", ctx.path);
       }
     }),
   },

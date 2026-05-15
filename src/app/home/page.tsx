@@ -9,6 +9,7 @@ import Depot17Logo from "#/images/logos/depot17.svg";
 import HackClubLogo from "#/images/logos/hackclub.svg";
 import RealitywareFullText from "#/images/logos/realityware_fulltext.svg";
 import ZoomLock from "@/components/zoom-lock";
+import { env } from "@/env";
 import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
 
@@ -193,20 +194,28 @@ export default function Home() {
                     return;
                   }
 
-                  toast.promise(
-                    authClient.signIn.oauth2({
-                      providerId: "hca",
-                      additionalData: {
-                        login_hint: email,
+                  if (env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED === "true") {
+                    window.location.href = `${env.NEXT_PUBLIC_APP_URL}/api/rsvp?email=${encodeURIComponent(email)}`;
+                  } else {
+                    toast.promise(
+                      authClient.signIn.oauth2({
+                        providerId: "hca",
+                        additionalData: {
+                          login_hint: email,
+                        },
+                      }),
+                      {
+                        loading: "Redirecting to Hack Club Auth...",
+                        success: (m) => {
+                          if (m.error) {
+                            return `Failed to redirect: ${m.error.message}`;
+                          } else
+                            return "Redirected! Please complete sign in to continue.";
+                        },
+                        error: "Failed to redirect. Please try again.",
                       },
-                    }),
-                    {
-                      loading: "Redirecting to Hack Club Auth...",
-                      success:
-                        "Redirected! Please complete sign in to continue.",
-                      error: "Failed to redirect. Please try again.",
-                    },
-                  );
+                    );
+                  }
                 }}
               >
                 <div className="flex h-12 items-center gap-2 rounded-xs border-2 border-black bg-white/50 px-4">
@@ -221,9 +230,11 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className="h-12 whitespace-nowrap rounded-xs border-1 bg-orange px-4 font-medium text-lg uppercase transition-colors"
+                  className="h-12 whitespace-nowrap rounded-xs border bg-orange px-4 font-medium text-lg uppercase transition-colors"
                 >
-                  ENTER
+                  {env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED === "true"
+                    ? "RSVP NOW"
+                    : "ENTER"}
                 </button>
               </form>
               <p className="pt-1 text-md">

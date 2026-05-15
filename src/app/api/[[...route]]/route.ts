@@ -1,4 +1,4 @@
-import { app } from "@/app-backend/app";
+import { app } from "@/app-backend";
 export const GET = app.fetch;
 export const POST = app.fetch;
 export const PUT = app.fetch;

@@ -1,10 +1,7 @@
 import { Hono } from "hono";
 import type { HonoOptions } from "hono/hono-base";
-import type { AuthType } from "@/lib/auth";
-import { router } from "./routes";
+import { type AuthType } from "@/lib/auth";
 
-export const App = (...params: [HonoOptions<{ Bindings: AuthType }>]) =>
-  new Hono<{ Bindings: AuthType }>(...params);
-export const app = new Hono().basePath("/api");
-
-app.route("/", router);
+export const HonoApp = (
+  params?: HonoOptions<{ Bindings: AuthType; Variables: AuthType }>,
+) => new Hono<{ Bindings: AuthType; Variables: AuthType }>(params);

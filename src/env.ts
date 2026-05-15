@@ -13,13 +13,18 @@ export const env = createEnv({
 
     // Auth
     BETTER_AUTH_SECRET: z.string().min(1),
-    BETTER_AUTH_URL: z.url().min(1),
     HCA_CLIENT_ID: z.string().min(1),
     HCA_CLIENT_SECRET: z.string().min(1),
     HACKATIME_CLIENT_ID: z.string().min(1),
     HACKATIME_CLIENT_SECRET: z.string().min(1),
+
+    // TOP SECRET ehe ts shi tuff
+    SIGNUP_ACCESS_BYPASS_PREFIX: z.string().min(1),
   },
   client: {
+    // Next.js
+    NEXT_PUBLIC_APP_URL: z.url().min(1),
+
     // Supabase (client)
     NEXT_PUBLIC_SUPABASE_URL: z.url(),
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY: z.string().min(1),
@@ -55,9 +60,13 @@ export const env = createEnv({
     NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_NAME: z.string().min(1).optional(),
     NEXT_PUBLIC_VERCEL_GIT_PREVIOUS_SHA: z.string().min(1).optional(),
     NEXT_PUBLIC_VERCEL_GIT_PULL_REQUEST_ID: z.string().min(1).optional(),
+
+    // TOP SECET sigma boy
+    NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED: z.string().min(1),
   },
   // biome-ignore format: you fucked up at formatting ts shi
   experimental__runtimeEnv: {
+    NEXT_PUBLIC_APP_URL:                            (process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL || "http://localhost:3000").replace(/\/$/, ''),
     NEXT_PUBLIC_SUPABASE_URL:                       process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY:   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY,
     NEXT_PUBLIC_POSTHOG_KEY:                        process.env.NEXT_PUBLIC_POSTHOG_KEY,
@@ -82,5 +91,6 @@ export const env = createEnv({
     NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_NAME:      process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_NAME,
     NEXT_PUBLIC_VERCEL_GIT_PREVIOUS_SHA:            process.env.NEXT_PUBLIC_VERCEL_GIT_PREVIOUS_SHA,
     NEXT_PUBLIC_VERCEL_GIT_PULL_REQUEST_ID:         process.env.NEXT_PUBLIC_VERCEL_GIT_PULL_REQUEST_ID,
+    NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED:             process.env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED,
   },
 });

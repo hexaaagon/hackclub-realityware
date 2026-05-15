@@ -1,5 +1,5 @@
-import { Hono } from "hono";
-export const router = new Hono();
+import { HonoApp } from "./app";
+export const router = HonoApp();
 
-// auth routes
 router.route("/auth/*", (await import("./auth")).router);
+router.route("/rsvp/*", (await import("./rsvp")).router);
