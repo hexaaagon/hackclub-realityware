@@ -23,6 +23,8 @@ declare global {
       BETTER_AUTH_URL: string;
       HCA_CLIENT_ID: string;
       HCA_CLIENT_SECRET: string;
+      HACKATIME_CLIENT_ID: string;
+      HACKATIME_CLIENT_SECRET: string;
 
       // Vercel-provided system vars
       NEXT_PUBLIC_VERCEL_ENV: "production" | "preview" | "development";

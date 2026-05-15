@@ -1,10 +1,15 @@
 "use client";
+import { MailboxIcon } from "@phosphor-icons/react";
+import { EnvelopeIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
+import Graffiti from "#/images/graffiti.svg";
 import Depot17Logo from "#/images/logos/depot17.svg";
 import HackClubLogo from "#/images/logos/hackclub.svg";
 import RealitywareFullText from "#/images/logos/realityware_fulltext.svg";
 import ZoomLock from "@/components/zoom-lock";
+import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
 
 const RAILING_LEFT_OFFSET = 96;
@@ -172,21 +177,40 @@ export default function Home() {
                 Ship a solution to a real problem, earn prizes.
               </p>
 
-              <div className="flex w-fit items-center gap-2">
-                <div className="flex h-12 items-center gap-2 rounded-xs border-2 border-black bg-white/50 px-4">
-                  <svg
-                    width="15"
-                    height="14"
-                    viewBox="0 0 15 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M9.40039 2.66699C9.356 2.88903 9.33303 3.11097 9.33301 3.33301C9.33301 3.55523 9.35595 3.77778 9.40039 4C9.47814 4.35537 9.60556 4.68579 9.7832 4.99121C9.96098 5.29677 10.178 5.56647 10.4336 5.7998L8 7.33301L2.66699 4V5.33301L8 8.66699L11.5166 6.4668C11.7054 6.53342 11.8942 6.58288 12.083 6.61621C12.2719 6.64954 12.467 6.66699 12.667 6.66699C13.0224 6.66696 13.3725 6.61108 13.7168 6.5C14.0612 6.38889 14.3781 6.2222 14.667 6V12C14.667 12.3665 14.5363 12.6804 14.2754 12.9414C14.0143 13.2025 13.6997 13.333 13.333 13.333H2.66699C2.30033 13.333 1.98572 13.2025 1.72461 12.9414C1.46372 12.6804 1.33301 12.3665 1.33301 12V4C1.33301 3.63349 1.46372 3.31964 1.72461 3.05859C1.98572 2.79748 2.30033 2.66699 2.66699 2.66699H9.40039ZM12.667 1.33301C13.2224 1.33308 13.6942 1.52818 14.083 1.91699C14.4718 2.30581 14.6669 2.77759 14.667 3.33301C14.667 3.88856 14.4719 4.36111 14.083 4.75C13.6942 5.1387 13.2223 5.33293 12.667 5.33301C12.1114 5.33301 11.6389 5.13889 11.25 4.75C10.8611 4.36111 10.667 3.88856 10.667 3.33301C10.6671 2.77767 10.8613 2.30577 11.25 1.91699C11.6389 1.5281 12.1114 1.33301 12.667 1.33301ZM0.00976562 0.00976562H0V0H0.00976562V0.00976562Z"
-                      fill="#BEC3C8"
-                    />
-                  </svg>
+              <form
+                className="flex w-fit items-center gap-2"
+                onSubmit={async (e) => {
+                  e.preventDefault();
 
+                  if (!email) {
+                    toast.error("Please enter your email address.");
+                    return;
+                  }
+
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailRegex.test(email)) {
+                    toast.error("Please enter a valid email address.");
+                    return;
+                  }
+
+                  toast.promise(
+                    authClient.signIn.oauth2({
+                      providerId: "hca",
+                      additionalData: {
+                        login_hint: email,
+                      },
+                    }),
+                    {
+                      loading: "Redirecting to Hack Club Auth...",
+                      success:
+                        "Redirected! Please complete sign in to continue.",
+                      error: "Failed to redirect. Please try again.",
+                    },
+                  );
+                }}
+              >
+                <div className="flex h-12 items-center gap-2 rounded-xs border-2 border-black bg-white/50 px-4">
+                  <EnvelopeIcon size={16} />
                   <input
                     type="email"
                     placeholder="orpheus@hackclub.com"
@@ -196,20 +220,20 @@ export default function Home() {
                   />
                 </div>
                 <button
-                  type="button"
+                  type="submit"
                   className="h-12 whitespace-nowrap rounded-xs border-1 bg-orange px-4 font-medium text-lg uppercase transition-colors"
                 >
                   ENTER
                 </button>
-              </div>
+              </form>
               <p className="pt-1 text-md">
                 For students aged 13&nbsp;–&nbsp;18 only.
               </p>
             </div>
-            <img
-              src="/static/images/graffiti.svg"
-              className="-bottom-1/2 absolute right-0 h-100 w-auto opacity-50"
-              alt=""
+            <Image
+              src={Graffiti}
+              className="-bottom-1/2 pointer-events-none absolute right-0 h-100 w-auto opacity-50"
+              alt="Grafitti"
             />
           </section>
 
