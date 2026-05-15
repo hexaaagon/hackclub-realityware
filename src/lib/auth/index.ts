@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { genericOAuth } from "better-auth/plugins";
+import { env } from "@/env";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema/auth";
 
@@ -26,8 +27,8 @@ export const auth = betterAuth({
           providerId: "hca",
           discoveryUrl:
             "https://auth.hackclub.com/.well-known/openid-configuration",
-          clientId: process.env.HCA_CLIENT_ID,
-          clientSecret: process.env.HCA_CLIENT_SECRET,
+          clientId: env.HCA_CLIENT_ID,
+          clientSecret: env.HCA_CLIENT_SECRET,
           scopes: [
             "openid",
             "email",
@@ -49,8 +50,8 @@ export const auth = betterAuth({
         },
         {
           providerId: "hackatime",
-          clientId: process.env.HACKATIME_CLIENT_ID,
-          clientSecret: process.env.HACKATIME_CLIENT_SECRET,
+          clientId: env.HACKATIME_CLIENT_ID,
+          clientSecret: env.HACKATIME_CLIENT_SECRET,
           authorizationUrl: "https://hackatime.hackclub.com/oauth/authorize",
           tokenUrl: "https://hackatime.hackclub.com/oauth/token",
           userInfoUrl: "https://hackatime.hackclub.com/api/v1/authenticated/me",

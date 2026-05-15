@@ -1,3 +1,4 @@
+import "@/env";
 // TODO: setup fumadocs later
 import createBundleAnalyzer from "@next/bundle-analyzer";
 // import { createMDX } from "fumadocs-mdx/next";

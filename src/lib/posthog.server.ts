@@ -1,11 +1,12 @@
 import { PostHog } from "posthog-node";
+import { env } from "@/env";
 
 let posthogInstance: PostHog | null = null;
 
 export function getPostHogServer() {
   if (!posthogInstance) {
-    posthogInstance = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-      host: process.env.NEXT_PUBLIC_POSTHOG_HOST_API,
+    posthogInstance = new PostHog(env.NEXT_PUBLIC_POSTHOG_KEY, {
+      host: env.NEXT_PUBLIC_POSTHOG_HOST_API,
       flushAt: 1,
       flushInterval: 0,
     });
