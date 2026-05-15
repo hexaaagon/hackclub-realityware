@@ -3,7 +3,6 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { genericOAuth } from "better-auth/plugins";
-import { da } from "zod/v4/locales";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema/auth";
 
@@ -146,3 +145,8 @@ export const auth = betterAuth({
     }),
   },
 });
+
+export type AuthType = {
+  user: typeof auth.$Infer.Session.user | null;
+  session: typeof auth.$Infer.Session.session | null;
+};
