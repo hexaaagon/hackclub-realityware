@@ -39,8 +39,8 @@ export const env = createEnv({
       .enum(["production", "preview", "development"])
       .optional(),
     NEXT_PUBLIC_VERCEL_TARGET_ENV: z.string().min(1).optional(),
-    NEXT_PUBLIC_VERCEL_URL: z.url().min(1).optional(),
-    NEXT_PUBLIC_VERCEL_BRANCH_URL: z.url().min(1).optional(),
+    NEXT_PUBLIC_VERCEL_URL: z.string().optional(),
+    NEXT_PUBLIC_VERCEL_BRANCH_URL: z.string().optional(),
     NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL: z.string().min(1).optional(),
     NEXT_PUBLIC_VERCEL_REGION: z.string().min(1).optional(),
     NEXT_PUBLIC_VERCEL_DEPLOYMENT_ID: z.string().min(1).optional(),
@@ -58,8 +58,8 @@ export const env = createEnv({
     NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE: z.string().min(1).optional(),
     NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_LOGIN: z.string().min(1).optional(),
     NEXT_PUBLIC_VERCEL_GIT_COMMIT_AUTHOR_NAME: z.string().min(1).optional(),
-    NEXT_PUBLIC_VERCEL_GIT_PREVIOUS_SHA: z.string().min(1).optional(),
-    NEXT_PUBLIC_VERCEL_GIT_PULL_REQUEST_ID: z.string().min(1).optional(),
+    NEXT_PUBLIC_VERCEL_GIT_PREVIOUS_SHA: z.string().optional(),
+    NEXT_PUBLIC_VERCEL_GIT_PULL_REQUEST_ID: z.string().optional(),
 
     // TOP SECET sigma boy
     NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED: z.string().min(1),
