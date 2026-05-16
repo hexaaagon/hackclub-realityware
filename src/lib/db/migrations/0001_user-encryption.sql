@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "encrypted_name" text NOT NULL;

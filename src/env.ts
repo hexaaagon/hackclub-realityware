@@ -6,7 +6,11 @@ export const env = createEnv({
     // Next.js
     ANALYZE: z.string().min(1),
 
+    // Security
+    ENCRYPTION_SECRET_KEY: z.string().min(64).max(64),
+
     // Database
+    SUPABASE_DATABASE_SECRET_KEY: z.string().min(1),
     SUPABASE_DATABASE_DIRECT_IPV6: z.string().min(1),
     SUPABASE_DATABASE_TRANSACTION_POOLER: z.string().min(1),
     SUPABASE_DATABASE_SESSION_POOLER_NOT_RECOMMENDED: z.string().min(1),
@@ -19,7 +23,7 @@ export const env = createEnv({
     HACKATIME_CLIENT_SECRET: z.string().min(1),
 
     // TOP SECRET ehe ts shi tuff
-    SIGNUP_ACCESS_BYPASS_PREFIX: z.string().min(1),
+    SIGNUP_ACCESS_BYPASS_PREFIX: z.string().optional(),
   },
   client: {
     // Next.js
@@ -62,7 +66,7 @@ export const env = createEnv({
     NEXT_PUBLIC_VERCEL_GIT_PULL_REQUEST_ID: z.string().optional(),
 
     // TOP SECET sigma boy
-    NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED: z.string().min(1),
+    NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED: z.string().optional(),
   },
   // biome-ignore format: you fucked up at formatting ts shi
   experimental__runtimeEnv: {
