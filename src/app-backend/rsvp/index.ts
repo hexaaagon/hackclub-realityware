@@ -16,7 +16,7 @@ router.get(
   async (c) => {
     const { email } = c.req.query();
 
-    if (email.startsWith(env.SIGNUP_ACCESS_BYPASS_PREFIX)) {
+    if (email.startsWith(env.SIGNUP_ACCESS_BYPASS_PREFIX || "")) {
       const data = await auth.api.signInWithOAuth2({
         body: {
           providerId: "hca",

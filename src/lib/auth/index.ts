@@ -46,9 +46,11 @@ export const auth = betterAuth({
 
         // rsvp thing i supposed
         if (env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED) {
-          if ((loginHint || "").startsWith(env.SIGNUP_ACCESS_BYPASS_PREFIX)) {
+          if (
+            (loginHint || "").startsWith(env.SIGNUP_ACCESS_BYPASS_PREFIX || "")
+          ) {
             ctx.body.login_hint = loginHint.replace(
-              env.SIGNUP_ACCESS_BYPASS_PREFIX,
+              env.SIGNUP_ACCESS_BYPASS_PREFIX || "",
               "",
             );
           } else {
