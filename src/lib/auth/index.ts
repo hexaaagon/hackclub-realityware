@@ -64,8 +64,6 @@ export const auth = betterAuth({
     after: createAuthMiddleware(async (ctx) => {
       const userId = ctx.context.session?.user.id;
       if (userId) {
-        console.log("user id:", userId);
-
         try {
           await supabaseService.rpc("set_user_id", { user_id: userId });
         } catch {
