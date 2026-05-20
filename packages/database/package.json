@@ -1,0 +1,43 @@
+{
+  "name": "@realityware/database",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./migrate": "./src/migrate.ts",
+    "./drizzle.config": "./drizzle.config.ts",
+    "./supabase/*": "./src/supabase/*.ts",
+    "./schema/*": "./src/schema/*.ts"
+  },
+  "scripts": {
+    "generate": "bun run generate:auth && bun run generate:migrations",
+    "generate:auth": "bunx @better-auth/cli generate --config ../auth/src/index.ts --output ./src/schema/auth.ts -y",
+    "generate:migrations": "drizzle-kit generate",
+    "migrate": "bun src/lib/db/migrate.ts",
+    "drop": "drizzle-kit drop",
+    "pull": "drizzle-kit introspect",
+    "push": "drizzle-kit push",
+    "studio": "drizzle-kit studio",
+    "check": "drizzle-kit check",
+    "postinstall": "bun run generate"
+  },
+  "dependencies": {
+    "@realityware/env": "*",
+    "@realityware/util": "*",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.0",
+    "drizzle-orm": "^0.45.2",
+    "drizzle-zod": "^0.8.3",
+    "next": "^16.2.6",
+    "postgres": "^3.4.9"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/fs-extra": "^11.0.4",
+    "drizzle-kit": "^0.31.10"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

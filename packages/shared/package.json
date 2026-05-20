@@ -1,0 +1,17 @@
+{
+  "name": "@realityware/shared",
+  "module": "index.ts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./schema": "./schema/*",
+    "./types": "./types/*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
