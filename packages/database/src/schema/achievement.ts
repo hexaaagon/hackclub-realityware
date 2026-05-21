@@ -9,4 +9,4 @@ export const achievement = pgTable("achievement", {
   name: text("name").notNull(),
   description: text("description").notNull(),
   iconUrl: text("icon_url").notNull(),
-});
+}).enableRLS();

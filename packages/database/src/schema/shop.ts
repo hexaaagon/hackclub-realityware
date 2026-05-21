@@ -52,4 +52,4 @@ export const item = pgTable("shom_item", {
       ]
     >()
     .notNull(),
-});
+}).enableRLS();

@@ -6,7 +6,7 @@
       "idx": 0,
       "version": "7",
       "when": 1773742558733,
-      "tag": "0000_woozy_nova",
+      "tag": "0000_bettar-auth",
       "breakpoints": true
     },
     {
@@ -19,8 +19,15 @@
     {
       "idx": 2,
       "version": "7",
-      "when": 1779283946253,
-      "tag": "0002_round_edwin_jarvis",
+      "when": 1779362438239,
+      "tag": "0002_added-a-bunch-of-tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1779364264805,
+      "tag": "0003_enable-rls",
       "breakpoints": true
     }
   ]

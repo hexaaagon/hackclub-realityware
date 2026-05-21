@@ -15,7 +15,7 @@ export const logUser = pgTable("log-user", {
     .references(() => user.id),
   action: userActionEnum().notNull(),
   data: jsonb(),
-});
+}).enableRLS();
 
 export const adminActionEnum = pgEnum("log-admin-action", [
   "add-permissions",
@@ -35,4 +35,4 @@ export const logAdmin = pgTable("log-admin", {
     .references(() => user.id),
   action: adminActionEnum().notNull(),
   data: jsonb(),
-});
+}).enableRLS();

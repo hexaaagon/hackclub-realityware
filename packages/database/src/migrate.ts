@@ -27,7 +27,7 @@ const runMigrate = async () => {
   // Database Migration
   console.log("⏳ Running Database migrations...");
   await migrate(db, {
-    migrationsFolder: "src/lib/db/migrations",
+    migrationsFolder: "src/migrations",
   });
 
   // Supabase Extensions check

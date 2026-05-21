@@ -11,16 +11,16 @@
     "./schema/*": "./src/schema/*.ts"
   },
   "scripts": {
-    "generate": "bun run generate:auth && bun run generate:migrations",
+    "generate": "bun --env-file=../../.env run generate:auth && bun --env-file=../../.env run generate:migrations",
     "generate:auth": "bunx @better-auth/cli generate --config ../auth/src/index.ts --output ./src/schema/auth.ts -y",
     "generate:migrations": "drizzle-kit generate",
-    "migrate": "bun src/lib/db/migrate.ts",
+    "migrate": "bun --env-file=../../.env src/migrate.ts",
     "drop": "drizzle-kit drop",
     "pull": "drizzle-kit introspect",
     "push": "drizzle-kit push",
     "studio": "drizzle-kit studio",
     "check": "drizzle-kit check",
-    "postinstall": "bun run generate"
+    "postinstall": "bun run migrate"
   },
   "dependencies": {
     "@realityware/env": "*",

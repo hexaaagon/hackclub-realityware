@@ -8,4 +8,9 @@ export default {
   dbCredentials: {
     url: env.SUPABASE_DATABASE_TRANSACTION_POOLER,
   },
+  entities: {
+    roles: {
+      provider: "supabase",
+    },
+  },
 } satisfies Config;

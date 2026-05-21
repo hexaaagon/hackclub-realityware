@@ -1,6 +1,6 @@
 {
-  "id": "404719e0-b04d-470e-89ed-c6cc11711c7e",
-  "prevId": "a2f0b116-5aa3-4af1-9a27-e55a98a66c32",
+  "id": "d660c20e-d00b-4a30-8f28-40bc409a76ac",
+  "prevId": "404719e0-b04d-470e-89ed-c6cc11711c7e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -70,7 +70,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.log-admin": {
       "name": "log-admin",
@@ -133,7 +133,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.log-user": {
       "name": "log-user",
@@ -196,7 +196,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.account": {
       "name": "account",
@@ -644,7 +644,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.shipped_project": {
       "name": "shipped_project",
@@ -714,7 +714,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.reviewer_approved_project": {
       "name": "reviewer_approved_project",
@@ -797,7 +797,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.reviewer_need_changes_project": {
       "name": "reviewer_need_changes_project",
@@ -881,7 +881,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.reviewer_project": {
       "name": "reviewer_project",
@@ -992,7 +992,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.reviewer_project_note": {
       "name": "reviewer_project_note",
@@ -1243,7 +1243,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
     "public.user_account": {
       "name": "user_account",
@@ -1320,7 +1320,7 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     }
   },
   "enums": {

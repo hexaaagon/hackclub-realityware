@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgPolicy, pgTable, text } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
 export const userPermissionEnum = pgEnum("user_permissions", [
@@ -16,4 +16,4 @@ export const account = pgTable("user_account", {
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
   shards: integer("shards").notNull().default(0),
-});
+}).enableRLS();

@@ -21,7 +21,7 @@ export const project = pgTable("project", {
   codeUrl: text("code_url").notNull(),
   playableUrl: text("playable_url").notNull(),
   imageUrl: text("image_url").notNull(),
-});
+}).enableRLS();
 
 export const shippedProjectStatusEnum = pgEnum("shipped_project_status", [
   "shipped",
@@ -38,4 +38,4 @@ export const shippedProject = pgTable("shipped_project", {
   shippedAt: text("shipped_at").notNull(),
   status: shippedProjectStatusEnum("status").notNull().default("shipped"),
   comment: text("comment"),
-});
+}).enableRLS();

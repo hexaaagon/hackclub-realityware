@@ -71,7 +71,7 @@ export const projectReview = pgTable("reviewer_project", {
   status: reviewStatusEnum("status").notNull().default("pending"),
   fraudPassed: boolean("fraud_passed"),
   fraudScore: integer("fraud_score").notNull().default(-1),
-});
+}).enableRLS();
 
 export const projectApprovedReview = pgTable("reviewer_approved_project", {
   id: integer("id")
@@ -79,13 +79,13 @@ export const projectApprovedReview = pgTable("reviewer_approved_project", {
     .references(() => projectReview.id),
   projectId: integer("project_id")
     .notNull()
-    .references(() => projectReview.projectId),
+    .references(() => project.id),
   reviewerId: integer("reviewer.id")
     .notNull()
-    .references(() => projectReview.reviewerId),
+    .references(() => account.id),
   shipJustification: text("ship_justification").notNull(),
   comment: text("comment"),
-});
+}).enableRLS();
 
 export const projectNeedChangesReview = pgTable(
   "reviewer_need_changes_project",
@@ -95,11 +95,11 @@ export const projectNeedChangesReview = pgTable(
       .references(() => projectReview.id),
     projectId: integer("project_id")
       .notNull()
-      .references(() => projectReview.projectId),
+      .references(() => project.id),
     reviewerId: integer("reviewer.id")
       .notNull()
-      .references(() => projectReview.reviewerId),
+      .references(() => account.id),
     comment: text("comment").notNull(),
     permanentRejection: boolean("permanent_rejection").notNull().default(false),
   },
-);
+).enableRLS();
