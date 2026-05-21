@@ -1,6 +1,6 @@
-import posthog from "@realityware/telemetry";
 import { genericOAuthClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
+import posthog from "posthog-js";
 
 export const authClient = createAuthClient({
   fetchOptions: {

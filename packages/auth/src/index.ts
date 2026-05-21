@@ -2,10 +2,6 @@ import { db } from "@realityware/database";
 import * as schema from "@realityware/database/schema/auth";
 import { supabaseService } from "@realityware/database/supabase/service-server";
 import { env } from "@realityware/env";
-import {
-  captureServerless,
-  getPostHogServer,
-} from "@realityware/telemetry/server";
 import { encryptData, encryptPlugin } from "@realityware/util/crypto";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -71,7 +67,9 @@ export const auth = betterAuth({
       // 2. Capture Successful OAuth2 Logins/Sign-Ups
       if (ctx.path.startsWith("/oauth2/callback/")) {
         try {
-          await supabaseService.rpc("set_user_id", { user_id: userId });
+          await supabaseService.rpc("set_user_id", {
+            user_id: userId as string,
+          });
         } catch (e) {
           console.error("Supabase identify failed", e);
         }
