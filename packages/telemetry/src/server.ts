@@ -14,3 +14,14 @@ export function getPostHogServer() {
 
   return posthogInstance;
 }
+
+export async function captureServerless(
+  params: Parameters<PostHog["captureImmediate"]>[0],
+) {
+  const client = getPostHogServer();
+  try {
+    await client.captureImmediate(params);
+  } catch (error) {
+    console.error("Failed to forward event to PostHog:", error);
+  }
+}

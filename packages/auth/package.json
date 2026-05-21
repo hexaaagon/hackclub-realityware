@@ -12,6 +12,7 @@
     "@realityware/database": "*",
     "@realityware/env": "*",
     "@realityware/telemetry": "*",
+    "@realityware/util": "*",
     "better-auth": "^1.6.11"
   },
   "devDependencies": {

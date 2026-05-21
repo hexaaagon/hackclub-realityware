@@ -11,6 +11,7 @@ router.get(
     "query",
     z.object({
       email: z.email(),
+      anon_id: z.string(),
     }),
   ),
   async (c) => {
@@ -22,6 +23,7 @@ router.get(
           providerId: "hca",
           additionalData: {
             login_hint: email,
+            anon_id: c.req.query("anon_id"),
           },
         },
       });

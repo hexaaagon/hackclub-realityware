@@ -2,13 +2,16 @@ import { db } from "@realityware/database";
 import * as schema from "@realityware/database/schema/auth";
 import { supabaseService } from "@realityware/database/supabase/service-server";
 import { env } from "@realityware/env";
-
+import {
+  captureServerless,
+  getPostHogServer,
+} from "@realityware/telemetry/server";
+import { encryptData, encryptPlugin } from "@realityware/util/crypto";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { genericOAuth } from "better-auth/plugins";
-import { decryptData, encryptData } from "../../util/src/crypto";
 
 export const auth = betterAuth({
   baseURL: env.NEXT_PUBLIC_APP_URL,
@@ -31,14 +34,10 @@ export const auth = betterAuth({
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
-      // storing the auth path for posthog nerds
-      if (ctx.context.responseHeaders) {
-        ctx.context.responseHeaders.set("X-Auth-Path", ctx.path);
-      }
-
       if (ctx.path === "/sign-in/oauth2") {
-        // validate login_hint thing to prevent abuse
         const { login_hint: loginHint } = ctx.body.additionalData;
+
+        // validate login_hint thing to prevent abuse
         if (!loginHint || typeof loginHint !== "string") {
           throw new APIError("BAD_REQUEST", {
             message: "Missing or invalid login_hint",
@@ -63,42 +62,19 @@ export const auth = betterAuth({
       }
     }),
     after: createAuthMiddleware(async (ctx) => {
-      const userId = ctx.context.session?.user.id;
-      if (userId) {
-        try {
-          await supabaseService.rpc("set_user_id", { user_id: userId });
-        } catch {
-          console.error("failed to set user id for supabase client");
-          // TODO: setup posthog error tracking here
-        }
-      } else {
-        console.log("no user id?");
-      }
+      const userId =
+        ctx.context.session?.user.id || ctx.context.newSession?.user.id;
 
       const newSession = ctx.context.newSession;
       if (!newSession) return;
 
-      // storing the auth event for posthog nerds
-      const { user } = newSession;
-      const authEvent: Record<string, string> = {
-        userId: user.id,
-        userEmail: user.email || "",
-        userName: user.name || "",
-        userCreatedAt: user.createdAt?.toString() || "",
-      };
-
-      if (ctx.path.startsWith("/callback/hca")) {
-        const isNewUser =
-          newSession.session.createdAt.getTime() === user.createdAt.getTime();
-        authEvent.eventType = isNewUser ? "user_signed_up" : "user_signed_in";
-        authEvent.method = "hca";
-      }
-
-      if (authEvent.eventType && ctx.context.responseHeaders) {
-        ctx.context.responseHeaders.set(
-          "X-Auth-Event",
-          JSON.stringify(authEvent),
-        );
+      // 2. Capture Successful OAuth2 Logins/Sign-Ups
+      if (ctx.path.startsWith("/oauth2/callback/")) {
+        try {
+          await supabaseService.rpc("set_user_id", { user_id: userId });
+        } catch (e) {
+          console.error("Supabase identify failed", e);
+        }
       }
     }),
   },
@@ -117,42 +93,7 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    {
-      id: "decrypt-session-pii",
-      hooks: {
-        after: [
-          {
-            matcher: (context) => context.path === "/get-session",
-            handler: createAuthMiddleware(async (ctx) => {
-              const returned = ctx.context.returned;
-              if (!returned || typeof returned !== "object") return;
-
-              const sessionResponse = returned as {
-                user?: {
-                  encrypted_name?: string | null;
-                  name?: string | null;
-                } | null;
-              };
-
-              const user = sessionResponse.user;
-              if (!user) return;
-
-              const encryptedName = user.encrypted_name;
-              if (!encryptedName) return;
-
-              try {
-                user.name = await decryptData(encryptedName);
-              } catch {
-                console.error(
-                  "Failed to decrypt user name for session response",
-                );
-                user.name = null;
-              }
-            }),
-          },
-        ],
-      },
-    },
+    encryptPlugin(),
     genericOAuth({
       config: [
         {

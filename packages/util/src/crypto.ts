@@ -1,4 +1,6 @@
 import { env } from "@realityware/env";
+import type { BetterAuthPlugin } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 
 const ENCRYPTION_KEY_HEX = env.ENCRYPTION_SECRET_KEY; // Must be exactly 64 hex characters (32 bytes)
 
@@ -48,4 +50,41 @@ export async function decryptData(encryptedBase64Url: string): Promise<string> {
 
   const decoder = new TextDecoder();
   return decoder.decode(decrypted);
+}
+
+export function encryptPlugin(): BetterAuthPlugin {
+  return {
+    id: "decrypt-session-pii",
+    hooks: {
+      after: [
+        {
+          matcher: (context) => context.path === "/get-session",
+          handler: createAuthMiddleware(async (ctx) => {
+            const returned = ctx.context.returned;
+            if (!returned || typeof returned !== "object") return;
+
+            const sessionResponse = returned as {
+              user?: {
+                encrypted_name?: string | null;
+                name?: string | null;
+              } | null;
+            };
+
+            const user = sessionResponse.user;
+            if (!user) return;
+
+            const encryptedName = user.encrypted_name;
+            if (!encryptedName) return;
+
+            try {
+              user.name = await decryptData(encryptedName);
+            } catch {
+              console.error("Failed to decrypt user name for session response");
+              user.name = null;
+            }
+          }),
+        },
+      ],
+    },
+  };
 }

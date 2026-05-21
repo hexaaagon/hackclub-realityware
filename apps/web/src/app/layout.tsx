@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import posthog from "@realityware/telemetry";
 import { ReactScan } from "@/components/react-scan";
 import { Toaster } from "@/components/ui/sonner";
 

@@ -10,9 +10,11 @@
     "./instrumentation-client": "./src/instrumentation-client.ts"
   },
   "dependencies": {
+    "@realityware/auth": "*",
     "@realityware/env": "*",
     "posthog-js": "^1.374.2",
-    "posthog-node": "^5.34.6"
+    "posthog-node": "^5.34.6",
+    "swr": "^2.4.1"
   },
   "devDependencies": {
     "@types/bun": "latest"

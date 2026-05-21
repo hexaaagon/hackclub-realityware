@@ -2,6 +2,7 @@
 import { EnvelopeIcon } from "@phosphor-icons/react/dist/ssr";
 import { authClient } from "@realityware/auth/client";
 import { env } from "@realityware/env";
+import posthog from "@realityware/telemetry";
 import { cn } from "@realityware/util";
 import Image from "next/image";
 import { useState } from "react";
@@ -194,13 +195,14 @@ export default function Home() {
                   }
 
                   if (env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED === "true") {
-                    window.location.href = `${env.NEXT_PUBLIC_APP_URL}/api/rsvp?email=${encodeURIComponent(email)}`;
+                    window.location.href = `${env.NEXT_PUBLIC_APP_URL}/api/rsvp?email=${encodeURIComponent(email)}&anon_id=${encodeURIComponent(posthog.get_distinct_id())}`;
                   } else {
                     toast.promise(
                       authClient.signIn.oauth2({
                         providerId: "hca",
                         additionalData: {
                           login_hint: email,
+                          anon_id: posthog.get_distinct_id(),
                         },
                       }),
                       {
