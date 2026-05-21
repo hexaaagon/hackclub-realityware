@@ -1,4 +1,5 @@
 import { env } from "@realityware/env";
+import type { Database } from "@realityware/shared/types/database";
 import { createServerClient } from "@supabase/ssr";
 import type { cookies } from "next/headers";
 
@@ -8,7 +9,7 @@ const supabaseKey = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
 export const createClient = (
   cookieStore: Awaited<ReturnType<typeof cookies>>,
 ) => {
-  return createServerClient(supabaseUrl!, supabaseKey!, {
+  return createServerClient<Database>(supabaseUrl!, supabaseKey!, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

@@ -26,7 +26,7 @@ export const reviewerUserNote = pgTable("reviewer_user_note", {
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => new Date())
     .notNull(),
-});
+}).enableRLS();
 
 export const reviewerProjectNote = pgTable("reviewer_project_note", {
   id: integer("id")
@@ -45,7 +45,7 @@ export const reviewerProjectNote = pgTable("reviewer_project_note", {
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => new Date())
     .notNull(),
-});
+}).enableRLS();
 
 // project
 //

@@ -1,4 +1,5 @@
 import { env } from "@realityware/env";
+import type { Database } from "@realityware/shared/types/database";
 import { createClient } from "@supabase/supabase-js";
 
 /**
@@ -8,7 +9,7 @@ import { createClient } from "@supabase/supabase-js";
  * This client should NEVER be used on the client side or exposed to users.
  */
 export const createServiceServer = () => {
-  return createClient(
+  return createClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.SUPABASE_DATABASE_SECRET_KEY,
     {

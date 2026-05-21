@@ -6,5 +6,7 @@ ALTER TABLE "shipped_project" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "reviewer_approved_project" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "reviewer_need_changes_project" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "reviewer_project" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "reviewer_project_note" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+ALTER TABLE "reviewer_user_note" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "shom_item" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 ALTER TABLE "user_account" ENABLE ROW LEVEL SECURITY;

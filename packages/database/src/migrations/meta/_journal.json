@@ -6,7 +6,7 @@
       "idx": 0,
       "version": "7",
       "when": 1773742558733,
-      "tag": "0000_bettar-auth",
+      "tag": "0000_better-auth",
       "breakpoints": true
     },
     {
@@ -26,7 +26,7 @@
     {
       "idx": 3,
       "version": "7",
-      "when": 1779364264805,
+      "when": 1779365354575,
       "tag": "0003_enable-rls",
       "breakpoints": true
     }

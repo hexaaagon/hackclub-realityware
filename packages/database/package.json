@@ -13,29 +13,35 @@
   "scripts": {
     "generate": "bun --env-file=../../.env run generate:auth && bun --env-file=../../.env run generate:migrations",
     "generate:auth": "bunx @better-auth/cli generate --config ../auth/src/index.ts --output ./src/schema/auth.ts -y",
-    "generate:migrations": "drizzle-kit generate",
+    "generate:migrations": "bun drizzle-kit generate",
+    "generate:types": "supabase gen types typescript --project-id \"dhadwsjyljonlqgaytzr\" --schema public > ../shared/types/database.ts",
     "migrate": "bun --env-file=../../.env src/migrate.ts",
-    "drop": "drizzle-kit drop",
-    "pull": "drizzle-kit introspect",
-    "push": "drizzle-kit push",
-    "studio": "drizzle-kit studio",
-    "check": "drizzle-kit check",
+    "drizzle-kit": "bun --env-file=../../.env drizzle-kit-w-env",
+    "drizzle-kit-w-env": "drizzle-kit",
+    "drop": "bun drizzle-kit drop",
+    "pull": "bun drizzle-kit introspect",
+    "push": "bun drizzle-kit push",
+    "studio": "bun drizzle-kit studio",
+    "check": "bun drizzle-kit check",
     "postinstall": "bun run migrate"
   },
   "dependencies": {
     "@realityware/env": "*",
+    "@realityware/shared": "*",
     "@realityware/util": "*",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.0",
     "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
+    "fs-extra": "^11.3.5",
     "next": "^16.2.6",
     "postgres": "^3.4.9"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/fs-extra": "^11.0.4",
-    "drizzle-kit": "^0.31.10"
+    "drizzle-kit": "^0.31.10",
+    "supabase": "^2.101.0"
   },
   "peerDependencies": {
     "typescript": "^5"

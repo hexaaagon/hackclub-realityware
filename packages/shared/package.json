@@ -5,8 +5,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./schema": "./schema/*",
-    "./types": "./types/*"
+    "./schema/*": "./schema/*.ts",
+    "./types/*": "./types/*.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
