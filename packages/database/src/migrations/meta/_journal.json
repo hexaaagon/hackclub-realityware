@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1773742558733,
-      "tag": "0000_better-auth",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1778906076847,
-      "tag": "0001_user-encryption",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1779362438239,
-      "tag": "0002_added-a-bunch-of-tables",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1779365354575,
-      "tag": "0003_enable-rls",
+      "when": 1779381295001,
+      "tag": "0000_initialize",
       "breakpoints": true
     }
   ]

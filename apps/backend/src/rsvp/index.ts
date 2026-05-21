@@ -27,6 +27,7 @@ router.get(
           },
         },
       });
+
       return c.redirect(data.url);
     }
 

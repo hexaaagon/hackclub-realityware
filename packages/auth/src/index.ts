@@ -8,6 +8,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { genericOAuth } from "better-auth/plugins";
+import { userRegistration } from "./database";
 
 export const auth = betterAuth({
   baseURL: env.NEXT_PUBLIC_APP_URL,
@@ -64,7 +65,6 @@ export const auth = betterAuth({
       const newSession = ctx.context.newSession;
       if (!newSession) return;
 
-      // 2. Capture Successful OAuth2 Logins/Sign-Ups
       if (ctx.path.startsWith("/oauth2/callback/")) {
         try {
           await supabaseService.rpc("set_user_id", {
@@ -86,6 +86,9 @@ export const auth = betterAuth({
           }
 
           return { data: user };
+        },
+        after: async (user, context) => {
+          await userRegistration(user, context);
         },
       },
     },

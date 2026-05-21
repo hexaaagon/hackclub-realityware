@@ -1,14 +1,13 @@
 import { integer, jsonb, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
-export const userActionEnum = pgEnum("log-user-action", [
-  "user-create",
-  "user-edit",
+export const userActionEnum = pgEnum("log_user_action", [
+  "user-modify",
   "project-draft",
   "project-delete",
   "project-ship",
 ]);
-export const logUser = pgTable("log-user", {
+export const logUser = pgTable("log_user", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
   userId: text("user_id")
     .notNull()
@@ -17,7 +16,7 @@ export const logUser = pgTable("log-user", {
   data: jsonb(),
 }).enableRLS();
 
-export const adminActionEnum = pgEnum("log-admin-action", [
+export const adminActionEnum = pgEnum("log_admin_action", [
   "add-permissions",
   "modify-permissions",
   "remove-permissions",
@@ -28,7 +27,7 @@ export const adminActionEnum = pgEnum("log-admin-action", [
   "modify-shop-item",
   "remove-shop-item",
 ]);
-export const logAdmin = pgTable("log-admin", {
+export const logAdmin = pgTable("log_admin", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
   userId: text("user_id")
     .notNull()
