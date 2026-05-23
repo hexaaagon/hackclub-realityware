@@ -1,0 +1,27 @@
+{
+  "name": "@realityware/bot",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {},
+  "author": "evan-gan, hexaa",
+  "license": "ISC",
+  "dependencies": {
+    "@realityware/env": "*",
+    "@realityware/database": "*",
+    "@slack/bolt": "^3.21.4",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.5.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "fs-extra": "^11.3.5",
+    "glob": "^13.0.6",
+    "hono": "^4.12.21",
+    "pg": "^8.16.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.16.0"
+  }
+}
