@@ -1,5 +1,5 @@
 import type { App } from "@slack/bolt";
-import { getTicketByOriginalTs, isTicketChannelMember } from "../../data";
+import { getTicketByOriginalTs, isTicketChannelMember } from "../lib/database";
 import type { ActionHandlerArgs, ActionManifest } from "../lib/handler";
 import { CallPriority, rateLimitedCall } from "../lib/rateLimiter";
 import { resolveTicket } from "../lib/ticket";
@@ -16,8 +16,10 @@ export async function handler(
   await ack();
 
   const userId = (body.user || {}).id;
-  const messageTs =
-    (body as any).message?.thread_ts || (body as any).message?.ts;
+  const message = (body as any).message as
+    | { thread_ts?: string; ts?: string }
+    | undefined;
+  const messageTs = message?.thread_ts || message?.ts;
 
   if (!messageTs) return;
 

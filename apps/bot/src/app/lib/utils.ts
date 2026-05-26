@@ -129,8 +129,7 @@ export function splitQueueMessage(
   const parts: string[] = [];
   let currentPart = header;
 
-  for (let index = 0; index < ticketsInQueue.length; index++) {
-    const ticket = ticketsInQueue[index];
+  for (const [index, ticket] of ticketsInQueue.entries()) {
     const claimStatus =
       ticket.responders.length === 0
         ? UNCLAIMED_TEXT

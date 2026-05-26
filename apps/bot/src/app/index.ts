@@ -1,6 +1,6 @@
 import { env } from "@realityware/env/slack";
 import { App, LogLevel } from "@slack/bolt";
-import { loadTicketData } from "../data";
+import { app as honoApp } from "../backend";
 import {
   AUTO_SAVE_INTERVAL_MS,
   LEADERBOARD_POST_INTERVAL_MS,
@@ -8,6 +8,7 @@ import {
   STARTUP_NOTIFICATION_USER_ID,
   TIMER_CHECK_INTERVAL_MS,
 } from "./lib/constants";
+import { loadTicketData } from "./lib/database";
 import { actionHandler, eventHandler } from "./lib/handler";
 import {
   getBotUserId,
@@ -23,6 +24,22 @@ export const app = new App({
   logLevel: LogLevel.WARN,
 });
 export const client = app.client;
+
+const EXPLICIT_DISCONNECT_ERROR =
+  "Unhandled event 'server explicit disconnect'";
+
+process.on("uncaughtException", (error) => {
+  const message = error instanceof Error ? error.message : String(error);
+  if (message.includes(EXPLICIT_DISCONNECT_ERROR)) {
+    console.error(
+      "❌ Slack socket-mode explicitly disconnected during connect. This typically indicates an invalid/revoked SLACK_APP_TOKEN or missing connections:write scope. Verify your Slack app token and try again.",
+    );
+    process.exit(1);
+  }
+
+  console.error("❌ Uncaught exception:", error);
+  process.exit(1);
+});
 
 async function startBot() {
   try {
@@ -51,17 +68,10 @@ async function startBot() {
       );
     }
 
-    // Initialize queue message and perform startup recovery
-    const {
-      initializeQueueOnStartup,
-      performStartupRecovery,
-      scanForMissedMessages,
-    } = await import("./lib/startupRecovery");
-    await initializeQueueOnStartup(client, console);
-
-    // Clean up old bot messages in tickets channel
-    const { cleanupOldBotMessages } = await import("./lib/ticket");
-    await cleanupOldBotMessages(client, console);
+    // Perform startup recovery and scan for missed messages
+    const { performStartupRecovery, scanForMissedMessages } = await import(
+      "./lib/startupRecovery"
+    );
 
     // Scan for missed messages (must run before regular recovery to catch offline messages)
     await scanForMissedMessages(client, console);
@@ -85,7 +95,7 @@ async function startBot() {
     );
 
     // Save ticket data periodically as a backup
-    const { saveTicketData } = await import("../data");
+    const { saveTicketData } = await import("./lib/database");
     setInterval(saveTicketData, AUTO_SAVE_INTERVAL_MS);
 
     // Post daily leaderboard and reset for next day
@@ -100,3 +110,7 @@ async function startBot() {
 }
 
 startBot();
+export default {
+  port: 3000,
+  fetch: honoApp.fetch,
+};

@@ -1,9 +1,7 @@
 import type { App } from "@slack/bolt";
-import { setLastProcessedMessageTs } from "../../data";
+import { setLastProcessedMessageTs } from "../lib/database";
 import type { EventHandlerArgs, EventManifest } from "../lib/handler";
-import { checkFAQ } from "../lib/hcai";
-import { CallPriority, rateLimitedCall } from "../lib/rateLimiter";
-import { createTicket, resolveTicket } from "../lib/ticket";
+import { createTicket } from "../lib/ticket";
 
 export const manifest: EventManifest = {
   title: "Help Channel Handler",
@@ -20,12 +18,23 @@ export async function handler(
     return;
   }
 
+  const messageEvent = event as {
+    channel?: string;
+    ts?: string;
+    thread_ts?: string;
+    subtype?: string;
+    text?: string;
+    user?: string;
+  };
+
   // Only process new messages in the help channel (not thread replies)
-  if (event.channel !== helpChannel || event.thread_ts) return;
-  const subtype = (event as any).subtype;
+  if (messageEvent.channel !== helpChannel || messageEvent.thread_ts) return;
+  const subtype = messageEvent.subtype;
   if (subtype && subtype !== "file_share") return; // Skip edited messages, etc.
 
-  const message = event as {
+  if (!messageEvent.ts || !messageEvent.user || !messageEvent.channel) return;
+
+  const message = messageEvent as {
     text: string;
     ts: string;
     channel: string;
@@ -35,32 +44,4 @@ export async function handler(
 
   // Update last processed message timestamp
   setLastProcessedMessageTs(message.ts);
-
-  // Check FAQ in background (fire and forget)
-  if (ticket && message.text) {
-    (async () => {
-      try {
-        const faqResult = await checkFAQ(message.text);
-        if (faqResult) {
-          // Post FAQ as reply in the same thread
-          await rateLimitedCall(
-            "chat.postMessage",
-            () =>
-              client.chat.postMessage({
-                channel: message.channel,
-                thread_ts: message.ts,
-                text:
-                  faqResult +
-                  "\n\nPlease reply in this thread if this doesn't answer your question!",
-              }),
-            CallPriority.Normal,
-          );
-
-          await resolveTicket(ticket, "system", client, logger); // Auto-resolve with FAQ answer
-        }
-      } catch (error) {
-        logger.warn("Failed to check FAQ:", error);
-      }
-    })();
-  }
 }

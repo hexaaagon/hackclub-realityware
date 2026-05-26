@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import "dotenv/config";
 
 /**
  * Configuration constants for the ticketing bot.
@@ -16,7 +16,6 @@ import 'dotenv/config';
  * Default: 20 minutes (1,200,000 ms)
  */
 export const GRACE_PERIOD_MS = 20 * 60 * 1000;
-
 
 /**
  * How often to check grace timers in milliseconds.
@@ -60,38 +59,43 @@ export const LEADERBOARD_POST_INTERVAL_MS = 24 * 60 * 60 * 1000;
 /**
  * Welcome message text shown to users when they create a ticket.
  */
-export const WELCOME_MESSAGE_TEXT = process.env.WELCOME_MESSAGE_TEXT || ':wave-pikachu-2: Thank you for creating a ticket. Someone will help you soon. Make sure to read the FAQ pinned to this channel!';
+export const WELCOME_MESSAGE_TEXT =
+  process.env.WELCOME_MESSAGE_TEXT ||
+  ":wave-pikachu-2: Thank you for creating a ticket. Someone will help you soon. Make sure to read the FAQ pinned to this channel!";
 
 /**
  * The button text for the resolve button.
  */
-export const RESOLVE_BUTTON_TEXT = 'Resolve';
+export const RESOLVE_BUTTON_TEXT = "Resolve";
 
 /**
  * Message shown when a ticket is resolved.
  * Use {HELP_CHANNEL} placeholder for the help channel mention.
  */
-export const TICKET_RESOLVED_MESSAGE = process.env.TICKET_RESOLVED_MESSAGE || 'This ticket has been marked as resolved. Feel free to send a new message to this thread to un-resolve it and ask further questions. If you have a new question, please post it in {HELP_CHANNEL} instead of replying here.';
+export const TICKET_RESOLVED_MESSAGE =
+  process.env.TICKET_RESOLVED_MESSAGE ||
+  "This ticket has been marked as resolved. Feel free to send a new message to this thread to un-resolve it and ask further questions. If you have a new question, please post it in {HELP_CHANNEL} instead of replying here.";
 
 /**
  * Message shown in queue when all tickets are handled.
  */
-export const ALL_TICKETS_RESOLVED_MESSAGE = '✅ *All tickets have been responded to!*';
+export const ALL_TICKETS_RESOLVED_MESSAGE =
+  "✅ *All tickets have been responded to!*";
 
 /**
  * Header for the queue message.
  */
-export const QUEUE_MESSAGE_HEADER = '🎫 *Tickets Needing Response:*';
+export const QUEUE_MESSAGE_HEADER = "🎫 *Tickets Needing Response:*";
 
 /**
  * Text shown for unclaimed tickets in the queue.
  */
-export const UNCLAIMED_TEXT = 'Not claimed';
+export const UNCLAIMED_TEXT = "Not claimed";
 
 /**
  * Text format for claimed tickets. Use {mentions} placeholder.
  */
-export const CLAIMED_TEXT_FORMAT = 'Claimed by: {mentions}';
+export const CLAIMED_TEXT_FORMAT = "Claimed by: {mentions}";
 
 // ============================================
 // STARTUP & LOGGING
@@ -106,7 +110,7 @@ export const STARTUP_NOTIFICATION_USER_ID = null;
 /**
  * Message sent on startup notification.
  */
-export const STARTUP_MESSAGE = 'Starting!';
+export const STARTUP_MESSAGE = "Starting!";
 
 // ============================================
 // RATE LIMITING
@@ -121,23 +125,26 @@ export const STARTUP_MESSAGE = 'Starting!';
  * Special: Varies by endpoint
  */
 
-export const ENDPOINT_RATE_LIMITS: Record<string, { requestsPerMinute: number; requestsPerSecond?: number }> = {
+export const ENDPOINT_RATE_LIMITS: Record<
+  string,
+  { requestsPerMinute: number; requestsPerSecond?: number }
+> = {
   // Special tier: 1 per second (workspace-wide)
-  'chat.postMessage': { requestsPerMinute: 60, requestsPerSecond: 1 },
-  
+  "chat.postMessage": { requestsPerMinute: 60, requestsPerSecond: 1 },
+
   // Tier 3: 50 per minute
-  'chat.update': { requestsPerMinute: 50 },
-  'chat.delete': { requestsPerMinute: 50 },
-  'reactions.add': { requestsPerMinute: 50 },
-  'conversations.history': { requestsPerMinute: 50 },
-  'conversations.replies': { requestsPerMinute: 50 },
-  
+  "chat.update": { requestsPerMinute: 50 },
+  "chat.delete": { requestsPerMinute: 50 },
+  "reactions.add": { requestsPerMinute: 50 },
+  "conversations.history": { requestsPerMinute: 50 },
+  "conversations.replies": { requestsPerMinute: 50 },
+
   // Tier 2: 20 per minute
-  'reactions.remove': { requestsPerMinute: 20 },
-  'pins.add': { requestsPerMinute: 20 },
-  'pins.remove': { requestsPerMinute: 20 },
-  
+  "reactions.remove": { requestsPerMinute: 20 },
+  "pins.add": { requestsPerMinute: 20 },
+  "pins.remove": { requestsPerMinute: 20 },
+
   // Tier 4: 100 per minute
-  'conversations.members': { requestsPerMinute: 100 },
-  'auth.test': { requestsPerMinute: 100 },
+  "conversations.members": { requestsPerMinute: 100 },
+  "auth.test": { requestsPerMinute: 100 },
 };

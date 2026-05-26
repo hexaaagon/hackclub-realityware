@@ -1,18 +1,16 @@
+import { GRACE_PERIOD_MS, TICKET_RESOLVED_MESSAGE } from "./constants";
 import {
   addResolution,
-  getQueueMessageTs,
   getTicketByOriginalTs,
   getTicketByTicketTs,
   isTicketChannelMember,
   saveTicketData,
-  setQueueMessageTs,
   type TicketInfo,
   tickets,
   ticketsByOriginalTs,
-} from "../../data";
-import { GRACE_PERIOD_MS, TICKET_RESOLVED_MESSAGE } from "./constants";
+} from "./database";
 import { CallPriority, rateLimitedCall } from "./rateLimiter";
-import { createWelcomeBlocks, getThreadUrl, splitQueueMessage } from "./utils";
+import { createWelcomeBlocks } from "./utils";
 
 /**
  * Creates a new ticket from a help channel message.
@@ -56,8 +54,6 @@ export async function createTicket(
 
       console.info(`✅ Ticket created for message ${message.ts}`);
 
-      // Update the queue message
-      await updateQueueMessage(client, logger);
       await saveTicketData();
       return ticketInfo;
     }
@@ -98,7 +94,6 @@ export async function handleStaffResponse(
     // First response - remove from queue
     if (ticket.inQueue) {
       ticket.inQueue = false;
-      await updateQueueMessage(client, logger);
     }
   }
 
@@ -122,8 +117,6 @@ export async function handleStaffResponse(
     }
   }
 
-  // Update the queue if needed
-  await updateQueueMessage(client, logger);
   await saveTicketData();
 
   return true;
@@ -227,7 +220,6 @@ export async function resolveTicket(
 
     // Remove from queue
     ticket.inQueue = false;
-    await updateQueueMessage(client, logger);
 
     // Update leaderboard
     addResolution(resolverId);
@@ -285,7 +277,6 @@ export async function unresolveTicket(
     // Add back to queue if there are no responders or if needed
     if (!ticket.inQueue && ticket.responders.length === 0) {
       ticket.inQueue = true;
-      await updateQueueMessage(client, logger);
     }
 
     await saveTicketData();
@@ -293,224 +284,6 @@ export async function unresolveTicket(
     return true;
   } catch (error) {
     logger.error("❌ Error unresolving ticket:", error);
-    return false;
-  }
-}
-
-/**
- * Searches the tickets channel for old messages from the bot and deletes them,
- * except for the current pinned queue message.
- */
-export async function cleanupOldBotMessages(
-  client: any,
-  logger: any,
-): Promise<void> {
-  try {
-    const ticketsChannel = process.env.TICKETS_CHANNEL;
-    if (!ticketsChannel) {
-      logger.error("❌ TICKETS_CHANNEL environment variable is not set");
-      return;
-    }
-
-    const currentQueueTs = getQueueMessageTs();
-
-    // Get bot user ID
-    const authResult: any = await rateLimitedCall("auth.test", () =>
-      client.auth.test(),
-    );
-    if (!authResult.ok) {
-      logger.error("❌ Failed to get bot user ID for cleanup");
-      return;
-    }
-    const botId = authResult.user_id;
-
-    logger.info(`🧹 Starting cleanup of old bot messages in ${ticketsChannel}`);
-
-    // Fetch messages from the tickets channel
-    const result: any = await rateLimitedCall(
-      "conversations.history",
-      () =>
-        client.conversations.history({
-          channel: ticketsChannel,
-          limit: 100,
-        }),
-      CallPriority.Low,
-    );
-
-    if (result.ok && result.messages) {
-      let deletedCount = 0;
-      for (const message of result.messages) {
-        // If message is from the bot and is not the current queue message
-        if (message.user === botId && message.ts !== currentQueueTs) {
-          try {
-            await rateLimitedCall(
-              "chat.delete",
-              () =>
-                client.chat.delete({
-                  channel: ticketsChannel,
-                  ts: message.ts,
-                }),
-              CallPriority.Low,
-            );
-            deletedCount++;
-          } catch (deleteError: any) {
-            // Log individual deletion failures but don't stop cleanup
-            if (deleteError?.data?.error === "cant_delete_message") {
-              logger.info(
-                `⚠️  Could not delete message ${message.ts} (permissions or age restriction)`,
-              );
-            } else {
-              logger.warn(
-                `Failed to delete message ${message.ts}:`,
-                deleteError,
-              );
-            }
-          }
-        }
-      }
-      if (deletedCount > 0) {
-        logger.info(`✅ Deleted ${deletedCount} old bot messages`);
-      } else {
-        logger.info("✨ No old bot messages to clean up");
-      }
-    }
-  } catch (error) {
-    logger.error("❌ Error cleaning up old bot messages:", error);
-  }
-}
-
-/**
- * Updates or creates the pinned queue message in the tickets channel.
- * Shows all tickets currently needing help.
- */
-/**
- * Updates the queue message in the tickets channel.
- * Updates the message in place by default, or reposts if needed.
- * Handles large queues by splitting across multiple messages if needed (max 2 parts).
- * @param client - Slack client
- * @param logger - Logger instance
- * @param forceRepost - If true, deletes and reposts message instead of updating in place
- */
-export async function updateQueueMessage(
-  client: any,
-  logger: any,
-  forceRepost: boolean = false,
-): Promise<boolean> {
-  try {
-    const ticketsChannel = process.env.TICKETS_CHANNEL;
-    if (!ticketsChannel) return false;
-
-    // Get all tickets in queue
-    const ticketsInQueue = Object.values(tickets)
-      .filter((t) => t.inQueue && !t.resolved)
-      .map((t) => ({
-        threadUrl: getThreadUrl(
-          t.originalChannel,
-          t.originalTs,
-          t.ticketMessageTs,
-        ),
-        responders: t.responders,
-      }));
-
-    // Split queue message into parts if needed (Slack 4000 char limit)
-    const queueParts = splitQueueMessage(ticketsInQueue);
-    const currentQueueTs = getQueueMessageTs();
-    const newQueueTs: string[] = [];
-
-    // Try to update existing messages if same number of parts
-    if (
-      !forceRepost &&
-      currentQueueTs.length === queueParts.length &&
-      currentQueueTs.length > 0
-    ) {
-      let updateSuccess = true;
-      for (let i = 0; i < queueParts.length; i++) {
-        try {
-          await rateLimitedCall(
-            "chat.update",
-            () =>
-              client.chat.update({
-                channel: ticketsChannel,
-                ts: currentQueueTs[i],
-                text: queueParts[i],
-              }),
-            CallPriority.Low,
-          );
-          newQueueTs.push(currentQueueTs[i]);
-        } catch (error) {
-          logger.warn(
-            `Failed to update queue message part ${i + 1}, will repost:`,
-            error,
-          );
-          updateSuccess = false;
-          break;
-        }
-      }
-      if (updateSuccess) {
-        return true;
-      }
-    }
-
-    // Delete old queue messages if they exist
-    if (currentQueueTs.length > 0) {
-      for (const ts of currentQueueTs) {
-        try {
-          await rateLimitedCall(
-            "chat.delete",
-            () =>
-              client.chat.delete({
-                channel: ticketsChannel,
-                ts: ts,
-              }),
-            CallPriority.Low,
-          );
-        } catch (error) {
-          // Message might already be deleted, that's fine
-          logger.info(`Old queue message ${ts} not found or already deleted`);
-        }
-      }
-    }
-
-    // Post new queue messages
-    for (let i = 0; i < queueParts.length; i++) {
-      const result: any = await rateLimitedCall(
-        "chat.postMessage",
-        () =>
-          client.chat.postMessage({
-            channel: ticketsChannel,
-            text: queueParts[i],
-          }),
-        CallPriority.Low,
-      );
-      newQueueTs.push(result.ts);
-
-      // Pin the message (try-catch to prevent losing timestamp if pinning fails)
-      try {
-        await rateLimitedCall(
-          "pins.add",
-          () =>
-            client.pins.add({
-              channel: ticketsChannel,
-              timestamp: result.ts,
-            }),
-          CallPriority.Low,
-        );
-      } catch (pinError) {
-        logger.warn(
-          `Failed to pin queue message part ${i + 1}, but timestamp was saved:`,
-          pinError,
-        );
-      }
-    }
-
-    setQueueMessageTs(newQueueTs);
-
-    // Save immediately after setting new timestamps
-    await saveTicketData();
-
-    return true;
-  } catch (error) {
-    logger.error("❌ Error updating queue message:", error);
     return false;
   }
 }
@@ -545,7 +318,6 @@ export async function checkGraceTimers(
   }
 
   if (queueChanged) {
-    await updateQueueMessage(client, logger);
     await saveTicketData();
   }
 }

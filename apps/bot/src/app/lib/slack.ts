@@ -1,3 +1,4 @@
+import { STARTUP_MESSAGE } from "./constants";
 import {
   isTicketChannelMember,
   lbForToday,
@@ -5,8 +6,7 @@ import {
   saveLeaderboardHistory,
   saveTicketData,
   setTicketChannelMembers,
-} from "../../data";
-import { STARTUP_MESSAGE } from "./constants";
+} from "./database";
 import { CallPriority, rateLimitedCall } from "./rateLimiter";
 
 let botUserId: string | null = null;

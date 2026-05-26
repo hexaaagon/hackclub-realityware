@@ -21,13 +21,13 @@ export const ticket = pgTable("tickets", {
   lastResolvedTs: bigint("last_resolved_ts", { mode: "number" }),
 }).enableRLS();
 
-export const leaderboard = pgTable("leaderboard", {
+export const leaderboard = pgTable("ticket_leaderboard", {
   slackId: text("slack_id").primaryKey(),
   countOfTickets: integer("count_of_tickets").notNull(),
 }).enableRLS();
 
 export const leaderboardHistory = pgTable(
-  "leaderboard_history",
+  "ticker_leaderboard_history",
   {
     date: text("date").notNull(),
     slackId: text("slack_id").notNull(),
@@ -38,7 +38,7 @@ export const leaderboardHistory = pgTable(
   }),
 ).enableRLS();
 
-export const metadata = pgTable("metadata", {
+export const metadata = pgTable("ticket_metadata", {
   key: text("key").primaryKey(),
   value: text("value"),
 }).enableRLS();

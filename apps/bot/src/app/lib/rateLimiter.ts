@@ -158,7 +158,7 @@ class EndpointRateLimiter {
     );
 
     if (requestsInLastMinute.length >= this.requestsPerMinute) {
-      const oldestRequest = requestsInLastMinute[0];
+      const oldestRequest = requestsInLastMinute[0] ?? now;
       const perMinuteWait = 60000 - (now - oldestRequest) + 100; // Add 100ms buffer
       maxWait = Math.max(maxWait, perMinuteWait);
     }

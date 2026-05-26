@@ -6,99 +6,11 @@
 
 import {
   getLastProcessedMessageTs,
-  getQueueMessageTs,
-  setQueueMessageTs,
   tickets,
   ticketsByOriginalTs,
-} from "../../data";
-import { QUEUE_MESSAGE_HEADER } from "./constants";
+} from "./database";
 import { CallPriority, rateLimitedCall } from "./rateLimiter";
-import { createTicket, updateQueueMessage } from "./ticket";
-
-/**
- * Cleans up old queue messages in the tickets channel on startup.
- * Deletes any previous queue messages that might have been left behind.
- */
-export async function cleanupOldQueueMessages(
-  client: any,
-  logger: any,
-): Promise<void> {
-  try {
-    const ticketsChannel = process.env.TICKETS_CHANNEL;
-    if (!ticketsChannel) {
-      logger.error("❌ TICKETS_CHANNEL environment variable is not set");
-      return;
-    }
-
-    logger.info("🧹 Cleaning up old queue messages...");
-
-    // Get the stored queue message timestamps
-    const storedQueueTsList = getQueueMessageTs();
-    const storedQueueTsSet = new Set(storedQueueTsList || []);
-
-    // Fetch recent messages from tickets channel to find old queue messages
-    const result: any = await rateLimitedCall(
-      "conversations.history",
-      () =>
-        client.conversations.history({
-          channel: ticketsChannel,
-          limit: 100, // Check last 100 messages
-        }),
-      CallPriority.Low,
-    );
-
-    if (!result.ok || !result.messages) {
-      logger.warn("⚠️  Failed to fetch tickets channel history");
-      return;
-    }
-
-    let deletedCount = 0;
-    for (const msg of result.messages) {
-      // Check if message is a queue message (contains the header and is from the bot)
-      if (msg.bot_id && msg.text && msg.text.includes(QUEUE_MESSAGE_HEADER)) {
-        // If it's not one of the currently stored queue messages, delete it
-        if (!storedQueueTsSet.has(msg.ts)) {
-          try {
-            await rateLimitedCall(
-              "chat.delete",
-              () =>
-                client.chat.delete({
-                  channel: ticketsChannel,
-                  ts: msg.ts,
-                }),
-              CallPriority.Low,
-            );
-            deletedCount++;
-            logger.info(`🗑️  Deleted old queue message: ${msg.ts}`);
-          } catch (error) {
-            logger.warn(`Failed to delete old queue message ${msg.ts}:`, error);
-          }
-        }
-      }
-    }
-
-    if (deletedCount > 0) {
-      logger.info(`✅ Cleaned up ${deletedCount} old queue message(s)`);
-    } else {
-      logger.info("✅ No old queue messages to clean up");
-    }
-
-    // If stored queue messages were deleted or don't exist, clear the timestamps
-    if (storedQueueTsList && storedQueueTsList.length > 0) {
-      const validTsList = storedQueueTsList.filter((ts) =>
-        result.messages.some((msg: any) => msg.ts === ts),
-      );
-      if (validTsList.length !== storedQueueTsList.length) {
-        logger.info(
-          "ℹ️  Some stored queue messages no longer exist, will create new ones",
-        );
-        setQueueMessageTs(validTsList.length > 0 ? validTsList : null);
-      }
-    }
-  } catch (error) {
-    logger.error("❌ Failed to clean up old queue messages:", error);
-  }
-}
+import { createTicket } from "./ticket";
 
 /**
  * Scans the help channel for messages posted while bot was offline.
@@ -205,29 +117,6 @@ export async function scanForMissedMessages(
 }
 
 /**
- * Initializes the queue message on startup with current unresolved tickets.
- * Cleans up any old queue messages first.
- */
-export async function initializeQueueOnStartup(
-  client: any,
-  logger: any,
-): Promise<void> {
-  try {
-    logger.info("🔄 Initializing queue message with stored tickets...");
-
-    // First, clean up any old queue messages
-    await cleanupOldQueueMessages(client, logger);
-
-    // Update/create queue message with all current tickets in queue
-    await updateQueueMessage(client, logger);
-
-    logger.info("✅ Queue message initialized successfully");
-  } catch (error) {
-    logger.error("❌ Failed to initialize queue message:", error);
-  }
-}
-
-/**
  * Performs startup recovery in the background.
  * Checks thread statuses to detect any changes that happened while offline.
  * Uses rate-limited API calls, so no manual batching needed.
@@ -280,9 +169,6 @@ export async function performStartupRecovery(
     logger.info(
       `✅ Startup recovery complete: ${recoveredCount} tickets checked, ${errorCount} errors`,
     );
-
-    // Update queue message after recovery
-    await updateQueueMessage(client, logger);
   } catch (error) {
     logger.error("❌ Startup recovery failed:", error);
   }

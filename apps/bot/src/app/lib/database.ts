@@ -1,11 +1,10 @@
-import { db } from "@realityware/database";
 import {
   leaderboard,
   leaderboardHistory,
   metadata,
   ticket,
 } from "@realityware/database/schema/ticket";
-import { sql } from "drizzle-orm";
+import { db } from "@realityware/database/slack";
 
 // Cache of user IDs who have access to the tickets channel (help staff)
 export let ticketChannelMembers: string[] = [];
@@ -22,53 +21,6 @@ export function isTicketChannelMember(userId: string): boolean {
  */
 export function setTicketChannelMembers(members: string[]) {
   ticketChannelMembers = members;
-}
-
-/**
- * Initializes the database tables if they don't exist.
- */
-export async function initDB() {
-  try {
-    await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS tickets (
-        ticket_ts TEXT PRIMARY KEY,
-        original_channel TEXT NOT NULL,
-        original_ts TEXT NOT NULL,
-        responders TEXT[] NOT NULL,
-        resolved BOOLEAN NOT NULL,
-        grace_timer_expiry BIGINT,
-        force_open BOOLEAN NOT NULL,
-        last_responder_id TEXT,
-        in_queue BOOLEAN NOT NULL,
-        closure_message_ts TEXT,
-        last_resolved_ts BIGINT
-      );
-    `);
-    await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS leaderboard (
-        slack_id TEXT PRIMARY KEY,
-        count_of_tickets INTEGER NOT NULL
-      );
-    `);
-    await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS leaderboard_history (
-        date TEXT NOT NULL,
-        slack_id TEXT NOT NULL,
-        count_of_tickets INTEGER NOT NULL,
-        PRIMARY KEY (date, slack_id)
-      );
-    `);
-    await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS metadata (
-        key TEXT PRIMARY KEY,
-        value TEXT
-      );
-    `);
-    console.log("✅ PostgreSQL tables initialized");
-  } catch (error) {
-    console.error("❌ Error initializing PostgreSQL tables:", error);
-    throw error;
-  }
 }
 
 /**
@@ -112,9 +64,6 @@ export const ticketsByOriginalTs: Record<string, string> = {};
 
 // Tracks ticket resolutions for the current day's leaderboard
 export let lbForToday: LBEntry[] = [];
-
-// Timestamps of the pinned queue message parts in the tickets channel (supports splitting across 2 messages)
-export let queueMessageTs: string[] = [];
 
 // Timestamp of the last processed message in the help channel (for recovery)
 let lastProcessedMessageTs: string | null = null;
@@ -171,17 +120,6 @@ export async function saveTicketData() {
       }
 
       // Save metadata
-      await tx
-        .insert(metadata)
-        .values({
-          key: "queueMessageTs",
-          value: JSON.stringify(queueMessageTs),
-        })
-        .onConflictDoUpdate({
-          target: metadata.key,
-          set: { value: JSON.stringify(queueMessageTs) },
-        });
-
       if (lastProcessedMessageTs) {
         await tx
           .insert(metadata)
@@ -208,13 +146,13 @@ export async function saveTicketData() {
  */
 export async function loadTicketData(): Promise<boolean> {
   try {
-    await initDB();
-
     // Clear existing data first
-    Object.keys(tickets).forEach((key) => delete tickets[key]);
-    Object.keys(ticketsByOriginalTs).forEach(
-      (key) => delete ticketsByOriginalTs[key],
-    );
+    Object.keys(tickets).forEach((key) => {
+      delete tickets[key];
+    });
+    Object.keys(ticketsByOriginalTs).forEach((key) => {
+      delete ticketsByOriginalTs[key];
+    });
     lbForToday.length = 0;
 
     // Load tickets
@@ -247,13 +185,6 @@ export async function loadTicketData(): Promise<boolean> {
     // Load metadata
     const metaRows = await db.select().from(metadata);
     for (const row of metaRows) {
-      if (row.key === "queueMessageTs") {
-        try {
-          queueMessageTs = row.value ? JSON.parse(row.value) : [];
-        } catch {
-          queueMessageTs = [];
-        }
-      }
       if (row.key === "lastProcessedMessageTs") {
         lastProcessedMessageTs = row.value || null;
       }
@@ -274,29 +205,30 @@ export async function loadTicketData(): Promise<boolean> {
  */
 export function getTicketByOriginalTs(originalTs: string): TicketInfo | null {
   const ticketTs = ticketsByOriginalTs[originalTs];
-  return ticketTs ? tickets[ticketTs] : null;
+  return ticketTs ? (tickets[ticketTs] ?? null) : null;
 }
 
 /**
  * Retrieves a ticket by its ticket message timestamp.
  */
 export function getTicketByTicketTs(ticketTs: string): TicketInfo | null {
-  return tickets[ticketTs] || null;
+  return tickets[ticketTs] ?? null;
 }
 
 /**
  * Adds a ticket resolution to the leaderboard.
  */
 export function addResolution(userId: string) {
-  const existingIndex = lbForToday.findIndex((e) => e.slack_id === userId);
-  if (existingIndex !== -1) {
-    lbForToday[existingIndex].count_of_tickets += 1;
-  } else {
-    lbForToday.push({
-      slack_id: userId,
-      count_of_tickets: 1,
-    });
+  const existing = lbForToday.find((entry) => entry.slack_id === userId);
+  if (existing) {
+    existing.count_of_tickets += 1;
+    return;
   }
+
+  lbForToday.push({
+    slack_id: userId,
+    count_of_tickets: 1,
+  });
 }
 
 /**
@@ -307,25 +239,11 @@ export function resetLeaderboard() {
 }
 
 /**
- * Updates the queue message timestamps (supports up to 2 parts).
- */
-export function setQueueMessageTs(ts: string[] | null) {
-  queueMessageTs = ts || [];
-}
-
-/**
- * Gets the current queue message timestamps.
- */
-export function getQueueMessageTs(): string[] {
-  return queueMessageTs;
-}
-
-/**
  * Saves leaderboard to history before resetting for a new day.
  */
 export async function saveLeaderboardHistory() {
   try {
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toISOString().slice(0, 10);
     for (const entry of lbForToday) {
       await db
         .insert(leaderboardHistory)

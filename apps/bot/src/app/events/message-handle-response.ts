@@ -1,5 +1,5 @@
 import type { App } from "@slack/bolt";
-import { isTicketChannelMember } from "../../data";
+import { isTicketChannelMember } from "../lib/database";
 import type { EventHandlerArgs, EventManifest } from "../lib/handler";
 import { handleStaffResponse, handleUserResponse } from "../lib/ticket";
 
@@ -18,13 +18,22 @@ export async function handler(
     return;
   }
 
+  const messageEvent = event as {
+    channel?: string;
+    ts?: string;
+    thread_ts?: string;
+    subtype?: string;
+    user?: string;
+    text?: string;
+  };
+
   // Only process thread replies in the help channel
-  if (!event.thread_ts || event.channel !== helpChannel) return;
-  if (event.thread_ts === event.ts) return;
-  const subtype = (event as any).subtype;
+  if (!messageEvent.thread_ts || messageEvent.channel !== helpChannel) return;
+  if (messageEvent.thread_ts === messageEvent.ts) return;
+  const subtype = messageEvent.subtype;
   if (subtype && subtype !== "file_share") return; // Skip edited messages, etc.
 
-  const threadReply = event as {
+  const threadReply = messageEvent as {
     thread_ts: string;
     user: string;
     text?: string;

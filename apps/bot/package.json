@@ -2,9 +2,12 @@
   "name": "@realityware/bot",
   "version": "0.0.0",
   "private": true,
-  "scripts": {},
   "author": "evan-gan, hexaa",
   "license": "ISC",
+  "scripts": {
+    "start": "bun run ./src/app/index.ts",
+    "dev": "bun run --hot ./src/app/index.ts"
+  },
   "dependencies": {
     "@realityware/env": "*",
     "@realityware/database": "*",
