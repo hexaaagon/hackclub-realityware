@@ -27,7 +27,7 @@ export const leaderboard = pgTable("ticket_leaderboard", {
 }).enableRLS();
 
 export const leaderboardHistory = pgTable(
-  "ticker_leaderboard_history",
+  "ticket_leaderboard_history",
   {
     date: text("date").notNull(),
     slackId: text("slack_id").notNull(),
