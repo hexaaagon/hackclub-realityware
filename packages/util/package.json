@@ -5,12 +5,13 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./crypto": "./src/crypto.ts"
+    "./*": "./src/*.ts"
   },
   "dependencies": {
     "@realityware/env": "*",
     "better-auth": "^1.6.11",
     "clsx": "^2.1.1",
+    "slack-block-builder": "^2.8.0",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {

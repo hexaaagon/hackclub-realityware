@@ -5,7 +5,7 @@ export const itemCategoryEnum = pgEnum("shop_item_category", [
   "grant",
   "items",
 ]);
-export const item = pgTable("shom_item", {
+export const item = pgTable("shop_item", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
   addedBy: text("added_by")
     .notNull()
