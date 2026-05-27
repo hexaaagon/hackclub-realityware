@@ -1,6 +1,6 @@
 display_information:
-  name: New ticketing bot
-  description: Manages help tickets and assigns them to team members.
+  name: Realityware Mascot
+  description: Manages help tickets and dms users about Realityware.
   background_color: "#3076a6"
 features:
   app_home:

@@ -2,13 +2,7 @@ import { HonoApp } from "./app";
 export const router = HonoApp();
 
 // slack
-router.route(
-  "/slack/get-user-info/*",
-  (await import("./slack/get-user-info")).router,
-);
+router.route("/slack/*", (await import("./slack")).router);
 
 // tickets
-router.route(
-  "/tickets/resolve/*",
-  (await import("./tickets/resolve-ticket")).router,
-);
+router.route("/tickets/*", (await import("./tickets")).router);

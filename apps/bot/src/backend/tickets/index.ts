@@ -6,6 +6,21 @@ import { resolveTicket } from "../../app/lib/ticket";
 import { HonoApp } from "../app";
 export const router = HonoApp();
 
+router.get(
+  "/",
+  zValidator("query", z.object({ ticketTs: z.string() })),
+  async (c) => {
+    const { ticketTs } = c.req.valid("query");
+
+    const ticket = getTicketByOriginalTs(ticketTs);
+    if (!ticket) {
+      return c.json({ error: "Ticket not found" }, 404);
+    }
+
+    return c.json({ ticket });
+  },
+);
+
 router.patch(
   "/",
   zValidator(
