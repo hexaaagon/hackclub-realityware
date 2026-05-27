@@ -22,6 +22,10 @@ export const env = createEnv({
     HACKATIME_CLIENT_ID: z.string().min(1),
     HACKATIME_CLIENT_SECRET: z.string().min(1),
 
+    // Slack Bot Integration
+    SLACK_BOT_BACKEND_API: z.string().min(1),
+    SLACK_BOT_BACKEND_TOKEN: z.string().min(32).max(32),
+
     // TOP SECRET ehe ts shi tuff
     SIGNUP_ACCESS_BYPASS_PREFIX: z.string().optional(),
   },
