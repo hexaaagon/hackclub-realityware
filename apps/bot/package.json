@@ -5,12 +5,13 @@
   "author": "evan-gan, hexaa",
   "license": "ISC",
   "scripts": {
-    "start": "bun run ./src/app/index.ts",
-    "dev": "bun run --hot ./src/app/index.ts"
+    "start": "bun run --bun ./src/app/index.ts",
+    "dev": "bun run --bun --hot ./src/app/index.ts"
   },
   "dependencies": {
-    "@realityware/env": "*",
+    "@hono/zod-validator": "^0.8.0",
     "@realityware/database": "*",
+    "@realityware/env": "*",
     "@slack/bolt": "^3.21.4",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.5.5",
@@ -22,7 +23,8 @@
     "pg": "^8.16.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.1",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/pg": "^8.16.0"

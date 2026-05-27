@@ -1,5 +1,14 @@
 import { HonoApp } from "./app";
 export const router = HonoApp();
 
-// router.route("/auth/*", (await import("./auth")).router);
-// router.route("/rsvp/*", (await import("./rsvp")).router);
+// slack
+router.route(
+  "/slack/get-user-info/*",
+  (await import("./slack/get-user-info")).router,
+);
+
+// tickets
+router.route(
+  "/tickets/resolve/*",
+  (await import("./tickets/resolve-ticket")).router,
+);

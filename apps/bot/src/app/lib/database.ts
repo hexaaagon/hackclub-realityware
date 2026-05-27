@@ -7,7 +7,7 @@ import {
 import { db } from "@realityware/database/slack";
 
 // Cache of user IDs who have access to the tickets channel (help staff)
-export let ticketChannelMembers: string[] = [];
+export let ticketChannelMembers: string[] = ["system"];
 
 /**
  * Checks if a user is a member of the tickets channel (i.e., help staff).
