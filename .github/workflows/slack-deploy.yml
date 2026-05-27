@@ -1,0 +1,28 @@
+name: Remote SSH Deploy Slack Bot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/bot/**"
+      - "packages/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute remote SSH commands
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.BOT_HOST }}
+          username: ${{ secrets.BOT_USERNAME }}
+          key: ${{ secrets.BOT_KEY }}
+          port: ${{ secrets.BOT_PORT }}
+          script: |
+            cd /home/hackclub-realityware
+            git pull origin main
+
+            cd apps/bot
+            /usr/local/bin/bun install
+
+            sudo systemctl restart realityware-bot.service
