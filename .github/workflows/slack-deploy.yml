@@ -25,4 +25,4 @@ jobs:
             cd apps/bot
             /usr/local/bin/bun install
 
-            sudo systemctl restart realityware-bot.service
+            systemctl restart realityware-bot.service
