@@ -18,7 +18,7 @@ export default async function RootLayout({
     .where(eq(account.userId, session?.user.id ?? ""))
     .limit(1);
 
-  if (!session || !userData[0] || !userData[0].permissions.includes("admin")) {
+  if (!session || !(userData[0].permissions || []).includes("admin")) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-gray-100">
         <div className="rounded-lg bg-white p-8 shadow-md">
