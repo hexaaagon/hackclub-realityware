@@ -1,7 +1,7 @@
 import type { App } from "@slack/bolt";
-import { setLastProcessedMessageTs } from "../lib/database";
-import type { EventHandlerArgs, EventManifest } from "../lib/handler";
-import { createTicket } from "../lib/ticket";
+import { setLastProcessedMessageTs } from "../../lib/database";
+import type { EventHandlerArgs, EventManifest } from "../../lib/handler";
+import { createTicket } from "../../lib/ticket";
 
 export const manifest: EventManifest = {
   title: "Help Channel Handler",

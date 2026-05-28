@@ -1,7 +1,7 @@
 import type { App } from "@slack/bolt";
-import { isTicketChannelMember } from "../lib/database";
-import type { EventHandlerArgs, EventManifest } from "../lib/handler";
-import { handleStaffResponse, handleUserResponse } from "../lib/ticket";
+import { isTicketChannelMember } from "../../lib/database";
+import type { EventHandlerArgs, EventManifest } from "../../lib/handler";
+import { handleStaffResponse, handleUserResponse } from "../../lib/ticket";
 
 export const manifest: EventManifest = {
   title: "Handle Ticket Responses",

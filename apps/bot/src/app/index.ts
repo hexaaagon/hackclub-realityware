@@ -7,15 +7,15 @@ import {
   MEMBER_REFRESH_INTERVAL_MS,
   STARTUP_NOTIFICATION_USER_ID,
   TIMER_CHECK_INTERVAL_MS,
-} from "./lib/constants";
-import { loadTicketData } from "./lib/database";
-import { actionHandler, eventHandler } from "./lib/handler";
+} from "../lib/constants";
+import { loadTicketData } from "../lib/database";
+import { actionHandler, eventHandler } from "../lib/handler";
 import {
   getBotUserId,
   notifyStartup,
   postLeaderboardAndReset,
   refreshTicketChannelMembers,
-} from "./lib/slack";
+} from "../lib/slack";
 
 export const app = new App({
   token: env.SLACK_BOT_TOKEN,
@@ -70,7 +70,7 @@ async function startBot() {
 
     // Perform startup recovery and scan for missed messages
     const { performStartupRecovery, scanForMissedMessages } = await import(
-      "./lib/startupRecovery"
+      "../lib/startupRecovery"
     );
 
     // Scan for missed messages (must run before regular recovery to catch offline messages)
@@ -88,14 +88,14 @@ async function startBot() {
     );
 
     // Check grace timers periodically
-    const { checkGraceTimers } = await import("./lib/ticket");
+    const { checkGraceTimers } = await import("../lib/ticket");
     setInterval(
       () => checkGraceTimers(client, console),
       TIMER_CHECK_INTERVAL_MS,
     );
 
     // Save ticket data periodically as a backup
-    const { saveTicketData } = await import("./lib/database");
+    const { saveTicketData } = await import("../lib/database");
     setInterval(saveTicketData, AUTO_SAVE_INTERVAL_MS);
 
     // Post daily leaderboard and reset for next day

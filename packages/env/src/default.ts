@@ -24,7 +24,7 @@ export const env = createEnv({
 
     // Slack Bot Integration
     SLACK_BOT_BACKEND_API: z.string().min(1),
-    SLACK_BOT_BACKEND_TOKEN: z.string().min(32).max(32),
+    SLACK_BOT_BACKEND_TOKEN: z.string().min(64).max(64),
 
     // TOP SECRET ehe ts shi tuff
     SIGNUP_ACCESS_BYPASS_PREFIX: z.string().optional(),

@@ -1,8 +1,11 @@
 import type { App } from "@slack/bolt";
-import { getTicketByOriginalTs, isTicketChannelMember } from "../lib/database";
-import type { ActionHandlerArgs, ActionManifest } from "../lib/handler";
-import { CallPriority, rateLimitedCall } from "../lib/rateLimiter";
-import { resolveTicket } from "../lib/ticket";
+import {
+  getTicketByOriginalTs,
+  isTicketChannelMember,
+} from "../../lib/database";
+import type { ActionHandlerArgs, ActionManifest } from "../../lib/handler";
+import { CallPriority, rateLimitedCall } from "../../lib/rateLimiter";
+import { resolveTicket } from "../../lib/ticket";
 
 export const manifest: ActionManifest = {
   title: "Resolve Ticket Button",

@@ -1,11 +1,13 @@
 import { zValidator } from "@hono/zod-validator";
 import z from "zod";
 import { app } from "../../app";
+import { authorizationProxy } from "../../lib/authorization";
 import { HonoApp } from "../app";
 export const router = HonoApp();
 
 router.get(
   "/",
+  authorizationProxy,
   zValidator(
     "query",
     z.object({
@@ -34,6 +36,7 @@ router.get(
 
 router.post(
   "/message",
+  authorizationProxy,
   zValidator(
     "json",
     z.object({
@@ -49,11 +52,11 @@ router.post(
     }),
   ),
   async (c) => {
-    const { slackId, message, text } = c.req.valid("json");
+    const { channel, message, text } = c.req.valid("json");
 
     try {
       const result = await app.client.chat.postMessage({
-        channel: slackId,
+        channel,
         blocks: message?.blocks,
         text,
       });

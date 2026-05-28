@@ -1,13 +1,15 @@
 import { zValidator } from "@hono/zod-validator";
 import z from "zod";
 import { app } from "../../app";
-import { getTicketByOriginalTs } from "../../app/lib/database";
-import { resolveTicket } from "../../app/lib/ticket";
+import { authorizationProxy } from "../../lib/authorization";
+import { getTicketByOriginalTs } from "../../lib/database";
+import { resolveTicket } from "../../lib/ticket";
 import { HonoApp } from "../app";
 export const router = HonoApp();
 
 router.get(
   "/",
+  authorizationProxy,
   zValidator("query", z.object({ ticketTs: z.string() })),
   async (c) => {
     const { ticketTs } = c.req.valid("query");
@@ -23,6 +25,7 @@ router.get(
 
 router.patch(
   "/",
+  authorizationProxy,
   zValidator(
     "json",
     z.object({
