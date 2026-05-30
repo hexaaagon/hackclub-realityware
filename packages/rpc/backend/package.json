@@ -1,5 +1,5 @@
 {
-  "name": "@realityware/backend",
+  "name": "@realityware/rpc-backend",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -7,13 +7,8 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.8.0",
-    "@realityware/auth": "*",
-    "@realityware/database": "*",
-    "@realityware/env": "*",
-    "@realityware/rpc-bot": "*",
-    "hono": "^4.12.21",
-    "zod": "^4.4.3"
+    "@realityware/backend": "*",
+    "hono": "^4.12.23"
   },
   "devDependencies": {
     "@types/bun": "latest"

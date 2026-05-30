@@ -3,9 +3,8 @@ import { auth } from "@realityware/auth/server";
 import { env } from "@realityware/env";
 import z from "zod";
 import { HonoApp } from "../app";
-export const router = HonoApp();
 
-router.get(
+export const rsvpRouter = HonoApp().get(
   "/",
   zValidator(
     "query",

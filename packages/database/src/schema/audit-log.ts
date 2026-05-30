@@ -1,4 +1,11 @@
-import { integer, jsonb, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import {
+  integer,
+  jsonb,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
 export const userActionEnum = pgEnum("log_user_action", [
@@ -13,6 +20,7 @@ export const logUser = pgTable("log_user", {
     .notNull()
     .references(() => user.id),
   action: userActionEnum().notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
   data: jsonb(),
 }).enableRLS();
 
@@ -33,5 +41,6 @@ export const logAdmin = pgTable("log_admin", {
     .notNull()
     .references(() => user.id),
   action: adminActionEnum().notNull(),
+  createdAt: timestamp().defaultNow().notNull(),
   data: jsonb(),
 }).enableRLS();

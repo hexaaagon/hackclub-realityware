@@ -1,4 +1,4 @@
-import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
 export const projectTypeEnum = pgEnum("project_type", [
@@ -23,19 +23,19 @@ export const project = pgTable("project", {
   imageUrl: text("image_url").notNull(),
 }).enableRLS();
 
-export const shippedProjectStatusEnum = pgEnum("shipped_project_status", [
+export const shippedProjectStatusEnum = pgEnum("project_shipped_status", [
   "shipped",
   "reviewed",
   "changes-needed",
   "permanently-rejected",
   "approved",
 ]);
-export const shippedProject = pgTable("shipped_project", {
+export const shippedProject = pgTable("project_shipped_status", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
   projectId: integer("project_id")
     .notNull()
     .references(() => project.id),
-  shippedAt: text("shipped_at").notNull(),
+  shippedAt: timestamp("shipped_at").defaultNow().notNull(),
   status: shippedProjectStatusEnum("status").notNull().default("shipped"),
   comment: text("comment"),
 }).enableRLS();
