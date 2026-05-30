@@ -9,8 +9,10 @@
     "./client": "./src/client.ts"
   },
   "dependencies": {
+    "@better-fetch/fetch": "^1.1.21",
     "@realityware/database": "*",
     "@realityware/env": "*",
+    "@realityware/shared": "*",
     "@realityware/util": "*",
     "better-auth": "^1.6.11",
     "posthog-js": "^1.374.3"

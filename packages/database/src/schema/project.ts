@@ -23,7 +23,7 @@ export const project = pgTable("project", {
   imageUrl: text("image_url").notNull(),
 }).enableRLS();
 
-export const shippedProjectStatusEnum = pgEnum("project_shipped_status", [
+export const shippedProjectStatusEnum = pgEnum("project_shipped_status_enum", [
   "shipped",
   "reviewed",
   "changes-needed",

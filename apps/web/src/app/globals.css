@@ -167,6 +167,12 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Per-font spacing */
+@utility font-sans {
+  font-family: var(--font-sans);
+  letter-spacing: -0.05em;
+}
+
 /* Radix/shadcn data-state variants */
 @custom-variant data-open {
   &:where([data-state="open"]),

@@ -15,7 +15,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -25,10 +24,20 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { isLoading, data: account } = useSWR("api/account", client.user.$get);
+  const { isLoading, data: user } = useSWR("api/user", async () => {
+    const data = await client.user.$get();
+
+    if (data.ok) {
+      const body = await data.json();
+      return body;
+    } else {
+      return { success: false as false };
+    }
+  });
 
   return (
     <SidebarMenu>
@@ -39,14 +48,43 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
+              {isLoading ? (
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarFallback className="rounded-lg">
+                    <Skeleton className="h-full w-full" />
+                  </AvatarFallback>
+                </Avatar>
+              ) : user?.success ? (
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    src={user.account.avatar}
+                    alt={`${user.account.displayName}'s Avatar`}
+                  />
+                  <AvatarFallback className="rounded-lg">
+                    {user.account.displayName
+                      .split(" ")
+                      .map((part) => part[0])
+                      .join("")
+                      .toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              ) : (
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarFallback className="rounded-lg">?</AvatarFallback>
+                </Avatar>
+              )}
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">
+                  {isLoading ? (
+                    <Skeleton className="h-full w-16" />
+                  ) : user?.success ? (
+                    user.account.displayName
+                  ) : (
+                    "?"
+                  )}
+                </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {user.email}
+                  {user?.success ? user.account.email : "?"}
                 </span>
               </div>
               <DotsThreeVerticalIcon className="ml-auto size-4" />
@@ -58,21 +96,6 @@ export function NavUser() {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    {user.email}
-                  </span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <UserCircleIcon />

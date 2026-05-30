@@ -1,5 +1,5 @@
 {
-  "id": "eecf8250-9ee0-47fa-9dac-af0cf76565f6",
+  "id": "9c4263d5-727c-4200-a26b-23e02b254133",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -106,6 +106,13 @@
           "primaryKey": false,
           "notNull": true
         },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
         "data": {
           "name": "data",
           "type": "jsonb",
@@ -168,6 +175,13 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         },
         "data": {
           "name": "data",
@@ -760,8 +774,8 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
-    "public.shipped_project": {
-      "name": "shipped_project",
+    "public.project_shipped_status": {
+      "name": "project_shipped_status",
       "schema": "",
       "columns": {
         "id": {
@@ -771,7 +785,7 @@
           "notNull": true,
           "identity": {
             "type": "always",
-            "name": "shipped_project_id_seq",
+            "name": "project_shipped_status_id_seq",
             "schema": "public",
             "increment": "1",
             "startWith": "1",
@@ -789,13 +803,14 @@
         },
         "shipped_at": {
           "name": "shipped_at",
-          "type": "text",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "status": {
           "name": "status",
-          "type": "shipped_project_status",
+          "type": "project_shipped_status_enum",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
@@ -810,9 +825,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "shipped_project_project_id_project_id_fk": {
-          "name": "shipped_project_project_id_project_id_fk",
-          "tableFrom": "shipped_project",
+        "project_shipped_status_project_id_project_id_fk": {
+          "name": "project_shipped_status_project_id_project_id_fk",
+          "tableFrom": "project_shipped_status",
           "tableTo": "project",
           "columnsFrom": [
             "project_id"
@@ -1062,10 +1077,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "reviewer_project_id_shipped_project_id_fk": {
-          "name": "reviewer_project_id_shipped_project_id_fk",
+        "reviewer_project_id_project_shipped_status_id_fk": {
+          "name": "reviewer_project_id_project_shipped_status_id_fk",
           "tableFrom": "reviewer_project",
-          "tableTo": "shipped_project",
+          "tableTo": "project_shipped_status",
           "columnsFrom": [
             "id"
           ],
@@ -1140,13 +1155,15 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -1240,13 +1257,15 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -1284,8 +1303,8 @@
       "checkConstraints": {},
       "isRLSEnabled": true
     },
-    "public.shom_item": {
-      "name": "shom_item",
+    "public.shop_item": {
+      "name": "shop_item",
       "schema": "",
       "columns": {
         "id": {
@@ -1295,7 +1314,7 @@
           "notNull": true,
           "identity": {
             "type": "always",
-            "name": "shom_item_id_seq",
+            "name": "shop_item_id_seq",
             "schema": "public",
             "increment": "1",
             "startWith": "1",
@@ -1339,9 +1358,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "shom_item_added_by_user_id_fk": {
-          "name": "shom_item_added_by_user_id_fk",
-          "tableFrom": "shom_item",
+        "shop_item_added_by_user_id_fk": {
+          "name": "shop_item_added_by_user_id_fk",
+          "tableFrom": "shop_item",
           "tableTo": "user",
           "columnsFrom": [
             "added_by"
@@ -1353,6 +1372,174 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.ticket_leaderboard": {
+      "name": "ticket_leaderboard",
+      "schema": "",
+      "columns": {
+        "slack_id": {
+          "name": "slack_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "count_of_tickets": {
+          "name": "count_of_tickets",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.ticket_leaderboard_history": {
+      "name": "ticket_leaderboard_history",
+      "schema": "",
+      "columns": {
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slack_id": {
+          "name": "slack_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "count_of_tickets": {
+          "name": "count_of_tickets",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "ticket_leaderboard_history_date_slack_id_pk": {
+          "name": "ticket_leaderboard_history_date_slack_id_pk",
+          "columns": [
+            "date",
+            "slack_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.ticket_metadata": {
+      "name": "ticket_metadata",
+      "schema": "",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.tickets": {
+      "name": "tickets",
+      "schema": "",
+      "columns": {
+        "ticket_ts": {
+          "name": "ticket_ts",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "original_channel": {
+          "name": "original_channel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "original_ts": {
+          "name": "original_ts",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "responders": {
+          "name": "responders",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resolved": {
+          "name": "resolved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "grace_timer_expiry": {
+          "name": "grace_timer_expiry",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "force_open": {
+          "name": "force_open",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_responder_id": {
+          "name": "last_responder_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "in_queue": {
+          "name": "in_queue",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "closure_message_ts": {
+          "name": "closure_message_ts",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_resolved_ts": {
+          "name": "last_resolved_ts",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -1386,6 +1573,24 @@
           "primaryKey": false,
           "notNull": true
         },
+        "slack_id": {
+          "name": "slack_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "email": {
           "name": "email",
           "type": "text",
@@ -1404,13 +1609,15 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "shards": {
           "name": "shards",
@@ -1451,6 +1658,13 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
+        "user_account_slack_id_unique": {
+          "name": "user_account_slack_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slack_id"
+          ]
+        },
         "user_account_email_unique": {
           "name": "user_account_email_unique",
           "nullsNotDistinct": false,
@@ -1503,8 +1717,8 @@
         "hardware"
       ]
     },
-    "public.shipped_project_status": {
-      "name": "shipped_project_status",
+    "public.project_shipped_status_enum": {
+      "name": "project_shipped_status_enum",
       "schema": "public",
       "values": [
         "shipped",

@@ -1,5 +1,5 @@
 "use client";
-import { EnvelopeIcon } from "@phosphor-icons/react/dist/ssr";
+import { EnvelopeIcon } from "@phosphor-icons/react";
 import { authClient } from "@realityware/auth/client";
 import { env } from "@realityware/env";
 import posthog from "@realityware/telemetry";

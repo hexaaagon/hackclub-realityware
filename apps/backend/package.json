@@ -7,11 +7,13 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@better-fetch/fetch": "^1.1.21",
     "@hono/zod-validator": "^0.8.0",
     "@realityware/auth": "*",
     "@realityware/database": "*",
     "@realityware/env": "*",
     "@realityware/rpc-bot": "*",
+    "@realityware/shared": "*",
     "hono": "^4.12.21",
     "zod": "^4.4.3"
   },

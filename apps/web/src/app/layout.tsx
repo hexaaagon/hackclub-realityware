@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} ${sacco.variable} font-pixel-square antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} ${sacco.variable} font-sans antialiased`}
       >
         <ReactScan />
         <Toaster />

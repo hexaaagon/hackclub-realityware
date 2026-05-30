@@ -15,11 +15,13 @@
       "name": "@realityware/backend",
       "version": "0.0.0",
       "dependencies": {
+        "@better-fetch/fetch": "^1.1.21",
         "@hono/zod-validator": "^0.8.0",
         "@realityware/auth": "*",
         "@realityware/database": "*",
         "@realityware/env": "*",
         "@realityware/rpc-bot": "*",
+        "@realityware/shared": "*",
         "hono": "^4.12.21",
         "zod": "^4.4.3",
       },
@@ -114,8 +116,10 @@
       "name": "@realityware/auth",
       "version": "0.0.0",
       "dependencies": {
+        "@better-fetch/fetch": "^1.1.21",
         "@realityware/database": "*",
         "@realityware/env": "*",
+        "@realityware/shared": "*",
         "@realityware/util": "*",
         "better-auth": "^1.6.11",
         "posthog-js": "^1.374.3",
@@ -201,6 +205,9 @@
     "packages/shared": {
       "name": "@realityware/shared",
       "version": "0.0.0",
+      "dependencies": {
+        "zod": "^4.4.3",
+      },
       "devDependencies": {
         "@types/bun": "latest",
       },

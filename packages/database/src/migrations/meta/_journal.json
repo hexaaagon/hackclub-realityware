@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1779381295001,
-      "tag": "0000_initialize",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1779633653563,
-      "tag": "0001_ticketing-bot",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1779810523160,
-      "tag": "0002_fixup-typos",
+      "when": 1780155027465,
+      "tag": "0000_prodution-ready",
       "breakpoints": true
     }
   ]
