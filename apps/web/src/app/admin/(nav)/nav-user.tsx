@@ -7,8 +7,7 @@ import {
   SignOutIcon,
   UserCircleIcon,
 } from "@phosphor-icons/react";
-import { client } from "@realityware/rpc-backend";
-import useSWR from "swr";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -25,19 +24,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { UserResponse } from "./app-sidebar";
 
-export function NavUser() {
+export function NavUser({
+  isLoading,
+  user,
+}: {
+  isLoading: boolean;
+  user: UserResponse | undefined;
+}) {
   const { isMobile } = useSidebar();
-  const { isLoading, data: user } = useSWR("api/user", async () => {
-    const data = await client.user.$get();
-
-    if (data.ok) {
-      const body = await data.json();
-      return body;
-    } else {
-      return { success: false as false };
-    }
-  });
+  const isSuccess = user?.success === true;
 
   return (
     <SidebarMenu>
@@ -48,13 +45,7 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              {isLoading ? (
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarFallback className="rounded-lg">
-                    <Skeleton className="h-full w-full" />
-                  </AvatarFallback>
-                </Avatar>
-              ) : user?.success ? (
+              {!isLoading && isSuccess ? (
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
                     src={user.account.avatar}
@@ -63,28 +54,32 @@ export function NavUser() {
                   <AvatarFallback className="rounded-lg">
                     {user.account.displayName
                       .split(" ")
-                      .map((part) => part[0])
+                      .map((part: string) => part[0])
                       .join("")
                       .toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               ) : (
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarFallback className="rounded-lg">?</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    <Skeleton className="h-full w-full" />
+                  </AvatarFallback>
                 </Avatar>
               )}
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
-                  {isLoading ? (
-                    <Skeleton className="h-full w-16" />
-                  ) : user?.success ? (
+                  {!isLoading && isSuccess ? (
                     user.account.displayName
                   ) : (
-                    "?"
+                    <Skeleton className="h-full w-16" />
                   )}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {user?.success ? user.account.email : "?"}
+                  {!isLoading && isSuccess ? (
+                    user.account.email
+                  ) : (
+                    <Skeleton className="h-full w-8" />
+                  )}
                 </span>
               </div>
               <DotsThreeVerticalIcon className="ml-auto size-4" />

@@ -167,10 +167,15 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/* Per-font spacing */
+/* Per-font Variation */
 @utility font-sans {
   font-family: var(--font-sans);
-  letter-spacing: -0.05em;
+  @apply tracking-tight font-medium;
+}
+
+@utility font-sacco {
+  font-family: var(--font-sacco);
+  @apply tracking-sacco text-xl;
 }
 
 /* Radix/shadcn data-state variants */
