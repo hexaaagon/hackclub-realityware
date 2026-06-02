@@ -12,17 +12,15 @@ export const account = pgTable("user_account", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
+  slackId: text("slack_id").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  avatar: text("avatar").notNull(),
   email: text("email")
     .notNull()
     .unique()
     .references(() => user.email),
-  // displayName: text("displayName").notNull(),
   permissions: userPermissionEnum("role").notNull().array().default(["member"]),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
   shards: integer("shards").notNull().default(0),
 }).enableRLS();

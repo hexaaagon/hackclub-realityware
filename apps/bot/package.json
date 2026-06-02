@@ -8,10 +8,15 @@
     "start": "bun run --bun ./src/app/index.ts",
     "dev": "bun run --bun --hot ./src/app/index.ts"
   },
+  "exports": {
+    ".": "./src/app/index.ts",
+    "./backend": "./src/backend/index.ts"
+  },
   "dependencies": {
     "@hono/zod-validator": "^0.8.0",
     "@realityware/database": "*",
     "@realityware/env": "*",
+    "@realityware/rpc-backend": "*",
     "@slack/bolt": "^3.21.4",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.5.5",
@@ -19,7 +24,7 @@
     "dotenv": "^16.4.5",
     "fs-extra": "^11.3.5",
     "glob": "^13.0.6",
-    "hono": "^4.12.21",
+    "hono": "^4.12.23",
     "pg": "^8.16.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.1",

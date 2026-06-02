@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import posthog from "@realityware/telemetry";
 import { ReactScan } from "@/components/react-scan";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,13 +37,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} font-pixel-square antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${GeistPixelSquare.variable} ${sacco.variable} font-sans antialiased`}
       >
         <ReactScan />
         <Toaster />
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

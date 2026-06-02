@@ -20,12 +20,8 @@ export const reviewerUserNote = pgTable("reviewer_user_note", {
     .notNull()
     .references(() => account.id),
   note: text("note").notNull(),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$onUpdate(() => new Date())
-    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }).enableRLS();
 
 export const reviewerProjectNote = pgTable("reviewer_project_note", {
@@ -39,12 +35,8 @@ export const reviewerProjectNote = pgTable("reviewer_project_note", {
     .notNull()
     .references(() => project.id),
   note: text("note").notNull(),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$onUpdate(() => new Date())
-    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }).enableRLS();
 
 // project

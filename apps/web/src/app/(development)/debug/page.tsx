@@ -138,7 +138,9 @@ export default function Home() {
           <Link className={buttonVariants()} href="/">
             user's dashboard
           </Link>
-          <Button disabled>admin dashboard</Button>
+          <Link className={buttonVariants()} href="/admin">
+            admin dashboard
+          </Link>
           <Button disabled>reviewer dashboard</Button>
           <Button disabled>fulfilment dashboard</Button>
         </span>

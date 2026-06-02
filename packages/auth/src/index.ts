@@ -28,6 +28,7 @@ export const auth = betterAuth({
       allowDifferentEmails: true,
     },
     encryptOAuthTokens: true,
+    storeStateStrategy: "database",
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
@@ -73,6 +74,12 @@ export const auth = betterAuth({
         } catch (e) {
           console.error("Supabase identify failed", e);
         }
+
+        try {
+          await userRegistration(newSession.user);
+        } catch (e) {
+          console.error("User registration failed", e);
+        }
       }
     }),
   },
@@ -86,9 +93,6 @@ export const auth = betterAuth({
           }
 
           return { data: user };
-        },
-        after: async (user, context) => {
-          await userRegistration(user, context);
         },
       },
     },

@@ -1,7 +1,7 @@
 import { HonoApp } from "./app";
-import { router } from "./routes";
+import { type RouterRoutes, router } from "./routes";
 
 export const app = HonoApp().basePath("/api");
-export type AppType = typeof app;
+export type AppType = RouterRoutes;
 
 app.route("/", router);

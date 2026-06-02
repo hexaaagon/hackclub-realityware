@@ -3,9 +3,8 @@ import { auth } from "@realityware/auth/server";
 import { env } from "@realityware/env";
 import z from "zod";
 import { HonoApp } from "../app";
-export const router = HonoApp();
 
-router.get(
+export const rsvpRouter = HonoApp().get(
   "/",
   zValidator(
     "query",
@@ -18,17 +17,34 @@ router.get(
     const { email } = c.req.query();
 
     if (email.startsWith(env.SIGNUP_ACCESS_BYPASS_PREFIX || "")) {
-      const data = await auth.api.signInWithOAuth2({
-        body: {
-          providerId: "hca",
-          additionalData: {
-            login_hint: email,
-            anon_id: c.req.query("anon_id"),
+      const { response, headers: responseHeaders } =
+        await auth.api.signInWithOAuth2({
+          returnHeaders: true,
+          headers: c.req.raw.headers,
+          body: {
+            providerId: "hca",
+            additionalData: {
+              login_hint: email,
+              anon_id: c.req.query("anon_id"),
+            },
           },
-        },
-      });
+        });
 
-      return c.redirect(data.url);
+      if (responseHeaders) {
+        const setCookies = responseHeaders.getSetCookie?.() ?? [];
+        if (setCookies.length > 0) {
+          for (const cookie of setCookies) {
+            c.res.headers.append("set-cookie", cookie);
+          }
+        } else {
+          const setCookie = responseHeaders.get("set-cookie");
+          if (setCookie) {
+            c.header("set-cookie", setCookie);
+          }
+        }
+      }
+
+      return c.redirect(response.url);
     }
 
     return c.redirect(

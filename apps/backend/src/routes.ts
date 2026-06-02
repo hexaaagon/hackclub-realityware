@@ -1,5 +1,12 @@
 import { HonoApp } from "./app";
-export const router = HonoApp();
+import { authRouter } from "./auth";
+import { rsvpRouter } from "./rsvp";
+import { userRouter } from "./user";
+import { userProjectRouter } from "./user/projects";
 
-router.route("/auth/*", (await import("./auth")).router);
-router.route("/rsvp/*", (await import("./rsvp")).router);
+export const router = HonoApp()
+  .route("/auth", authRouter)
+  .route("/rsvp", rsvpRouter)
+  .route("/user", userRouter)
+  .route("/user/projects", userProjectRouter);
+export type RouterRoutes = typeof router;

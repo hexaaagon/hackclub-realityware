@@ -1,6 +1,6 @@
 display_information:
-  name: Realityware Mascot
-  description: Manages help tickets and dms users about Realityware.
+  name: silly willy little dev bot
+  description: silly dev bot
   background_color: "#3076a6"
 features:
   app_home:
