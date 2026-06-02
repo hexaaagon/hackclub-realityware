@@ -13,6 +13,7 @@ export function isSlackEnv(env: Envs): env is SlackEnv {
   return (env as SlackEnv).SLACK_APP_TOKEN !== undefined;
 }
 
+console.log("🔧 db: loading DATABASE_URL env");
 export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
@@ -20,5 +21,6 @@ export const env = createEnv({
   runtimeEnv: process.env,
 });
 
-export const client = postgres(env.DATABASE_URL);
+console.log("🔧 db: creating postgres client");
+export const client = postgres(env.DATABASE_URL, { connect_timeout: 5 });
 export const db = drizzle({ client });

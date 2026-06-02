@@ -20,9 +20,11 @@ jobs:
           port: ${{ secrets.BOT_PORT }}
           script: |
             cd /home/hackclub-realityware
+            git stash -u
+            git checkout main
             git pull origin main
 
             cd apps/bot
-            /usr/local/bin/bun install
+            /usr/local/bin/bun install ---frozen-lockfile
 
             systemctl restart realityware-bot.service
