@@ -178,13 +178,14 @@
       "name": "@realityware/rpc-backend",
       "version": "0.0.0",
       "dependencies": {
-        "@realityware/backend": "*",
         "hono": "^4.12.23",
       },
       "devDependencies": {
+        "@realityware/backend": "*",
         "@types/bun": "latest",
       },
       "peerDependencies": {
+        "@realityware/backend": "*",
         "typescript": "^5",
       },
     },
@@ -192,13 +193,14 @@
       "name": "@realityware/rpc-bot",
       "version": "0.0.0",
       "dependencies": {
-        "@realityware/bot": "*",
         "hono": "^4.12.23",
       },
       "devDependencies": {
+        "@realityware/bot": "*",
         "@types/bun": "latest",
       },
       "peerDependencies": {
+        "@realityware/bot": "*",
         "typescript": "^5",
       },
     },
