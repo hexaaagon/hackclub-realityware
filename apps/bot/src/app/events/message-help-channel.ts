@@ -1,4 +1,4 @@
-import type { App } from "@slack/bolt";
+import type { App, GenericMessageEvent } from "@slack/bolt";
 import { setLastProcessedMessageTs } from "../../lib/database";
 import type { EventHandlerArgs, EventManifest } from "../../lib/handler";
 import { createTicket } from "../../lib/ticket";
@@ -18,14 +18,7 @@ export async function handler(
     return;
   }
 
-  const messageEvent = event as {
-    channel?: string;
-    ts?: string;
-    thread_ts?: string;
-    subtype?: string;
-    text?: string;
-    user?: string;
-  };
+  const messageEvent = event as GenericMessageEvent;
 
   // Only process new messages in the help channel (not thread replies)
   if (messageEvent.channel !== helpChannel || messageEvent.thread_ts) return;
@@ -40,8 +33,7 @@ export async function handler(
     channel: string;
     user: string;
   };
-  const ticket = await createTicket(message, client, logger);
 
-  // Update last processed message timestamp
+  await createTicket(message, client, logger);
   setLastProcessedMessageTs(message.ts);
 }

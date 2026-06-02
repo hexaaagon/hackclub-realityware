@@ -75,6 +75,13 @@ export const TICKET_RESOLVED_MESSAGE =
   "This ticket has been marked as resolved. Feel free to send a new message to this thread to un-resolve it and ask further questions. If you have a new question, please post it in {HELP_CHANNEL} instead of replying here.";
 
 /**
+ * Message shown when the original help message was deleted.
+ * Use {HELP_CHANNEL} placeholder for the help channel mention.
+ */
+export const TICKET_DELETED_MESSAGE =
+  "The original help message was deleted, so this ticket has been closed. If you still need help, please post a new message in {HELP_CHANNEL}.";
+
+/**
  * Message shown in queue when all tickets are handled.
  */
 export const ALL_TICKETS_RESOLVED_MESSAGE =

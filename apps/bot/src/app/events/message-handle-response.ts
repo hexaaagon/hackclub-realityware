@@ -1,4 +1,4 @@
-import type { App } from "@slack/bolt";
+import type { App, GenericMessageEvent } from "@slack/bolt";
 import { isTicketChannelMember } from "../../lib/database";
 import type { EventHandlerArgs, EventManifest } from "../../lib/handler";
 import { handleStaffResponse, handleUserResponse } from "../../lib/ticket";
@@ -18,14 +18,7 @@ export async function handler(
     return;
   }
 
-  const messageEvent = event as {
-    channel?: string;
-    ts?: string;
-    thread_ts?: string;
-    subtype?: string;
-    user?: string;
-    text?: string;
-  };
+  const messageEvent = event as GenericMessageEvent;
 
   // Only process thread replies in the help channel
   if (!messageEvent.thread_ts || messageEvent.channel !== helpChannel) return;

@@ -26,10 +26,10 @@ export type EventHandler = (
 ) => Promise<void> | void;
 
 export function eventHandler(app: typeof slackApp) {
-  const eventFiles = glob.sync("../src/events/**/*.ts", { cwd: "src/app" });
+  const eventFiles = glob.sync("./events/**/*.ts", { cwd: "./src/app" });
 
   for (const file of eventFiles) {
-    import(`../${file}`)
+    import(`../app/${file}`)
       .then(
         ({
           manifest,
@@ -81,10 +81,12 @@ export type ActionHandler = (
 ) => Promise<void> | void;
 
 export function actionHandler(app: typeof slackApp) {
-  const actionFiles = glob.sync("../src/actions/**/*.ts", { cwd: "src/app" });
+  const actionFiles = glob.sync("./actions/**/*.ts", {
+    cwd: "./src/app",
+  });
 
   for (const file of actionFiles) {
-    import(`../${file}`)
+    import(`../app/${file}`)
       .then(
         ({
           manifest,

@@ -164,6 +164,7 @@ export async function resolveTicket(
   resolverId: string,
   client: any,
   logger: any,
+  closureMessage?: string,
 ): Promise<boolean> {
   // Prevent double resolution if already resolved
   if (ticket.resolved) {
@@ -202,16 +203,18 @@ export async function resolveTicket(
       ticket.responders.includes(ticket.lastResponderId);
 
     if (isStaffResolver || lastResponderWasStaff || resolverId === "system") {
+      const messageText = (closureMessage || TICKET_RESOLVED_MESSAGE).replace(
+        "{HELP_CHANNEL}",
+        `<#${process.env.HELP_CHANNEL}>`,
+      );
+
       const closureResult: any = await rateLimitedCall(
         "chat.postMessage",
         () =>
           client.chat.postMessage({
             channel: ticket.originalChannel,
             thread_ts: ticket.originalTs,
-            text: TICKET_RESOLVED_MESSAGE.replace(
-              "{HELP_CHANNEL}",
-              `<#${process.env.HELP_CHANNEL}>`,
-            ),
+            text: messageText,
           }),
         CallPriority.High,
       );
