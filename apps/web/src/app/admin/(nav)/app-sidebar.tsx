@@ -26,7 +26,7 @@ export type UserResponse = Exclude<
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const account = useSWR<UserResponse>("api/user", async () => {
-    const data = await client.user.$get();
+    const data = await client.user.$get({});
 
     if (data.ok) {
       const body = await data.json();

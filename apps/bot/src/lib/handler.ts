@@ -5,7 +5,7 @@ import type {
 } from "@slack/bolt";
 import type { StringIndexed } from "@slack/bolt/dist/types/helpers";
 import { glob } from "glob";
-import type { app as slackApp } from "..";
+import type { app as slackApp } from "../app/index";
 
 export type RejectionAnswer =
   | null

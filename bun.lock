@@ -179,6 +179,7 @@
       "name": "@realityware/rpc-backend",
       "version": "0.0.0",
       "dependencies": {
+        "@realityware/rpc-types": "*",
         "hono": "^4.12.23",
       },
       "devDependencies": {
@@ -192,8 +193,19 @@
       "name": "@realityware/rpc-bot",
       "version": "0.0.0",
       "dependencies": {
+        "@realityware/rpc-types": "*",
         "hono": "^4.12.23",
       },
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
+      },
+    },
+    "packages/rpc/types": {
+      "name": "@realityware/rpc-types",
+      "version": "0.0.0",
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -735,6 +747,8 @@
     "@realityware/rpc-backend": ["@realityware/rpc-backend@workspace:packages/rpc/backend"],
 
     "@realityware/rpc-bot": ["@realityware/rpc-bot@workspace:packages/rpc/bot"],
+
+    "@realityware/rpc-types": ["@realityware/rpc-types@workspace:packages/rpc/types"],
 
     "@realityware/shared": ["@realityware/shared@workspace:packages/shared"],
 

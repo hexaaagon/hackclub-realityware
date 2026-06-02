@@ -3,10 +3,7 @@
     // Environment setup & latest features
     "lib": ["ESNext"],
     "target": "ESNext",
-    "baseUrl": ".",
-    "paths": {
-      "@realityware/bot/backend": ["../../apps/bot/src/backend/index.ts"],
-    },
+
     "module": "Preserve",
     "moduleDetection": "force",
     "jsx": "react-jsx",
