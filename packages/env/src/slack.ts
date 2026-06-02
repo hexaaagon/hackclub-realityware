@@ -1,6 +1,8 @@
 import { createEnv } from "@t3-oss/env-core";
 import z from "zod";
 
+console.log("🔧 env: loading Slack env");
+
 export const env = createEnv({
   server: {
     // Database

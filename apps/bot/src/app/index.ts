@@ -43,10 +43,14 @@ process.on("uncaughtException", (error) => {
 
 async function startBot() {
   try {
+    console.log("🔧 Starting bot: iniatializing handler...");
     eventHandler(app);
     actionHandler(app);
 
+    console.log("🔧 Starting bot: loading ticket data...");
     await loadTicketData();
+
+    console.log("🔧 Starting bot: connecting to Slack (app.start)...");
     await app.start();
 
     console.log("⚡️ Slack Bolt app is running!");
