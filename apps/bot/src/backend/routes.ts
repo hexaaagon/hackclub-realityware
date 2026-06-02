@@ -1,12 +1,17 @@
 import { HonoApp } from "./app";
+import { router as slackRouter } from "./slack";
+import { router as statusRouter } from "./status";
+import { router as statusHealthRouter } from "./status/health";
+import { router as ticketsRouter } from "./tickets";
+
 export const router = HonoApp();
 
 // slack
-router.route("/slack", (await import("./slack")).router);
+router.route("/slack", slackRouter);
 
 // status
-router.route("/status", (await import("./status")).router);
-router.route("/status/health", (await import("./status/health")).router);
+router.route("/status", statusRouter);
+router.route("/status/health", statusHealthRouter);
 
 // tickets
-router.route("/tickets", (await import("./tickets")).router);
+router.route("/tickets", ticketsRouter);
