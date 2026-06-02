@@ -1,14 +1,10 @@
 {
-  "name": "@realityware/rpc-bot",
+  "name": "@realityware/rpc-types",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
-  },
-  "dependencies": {
-    "@realityware/rpc-types": "*",
-    "hono": "^4.12.23"
   },
   "devDependencies": {
     "@types/bun": "latest"
