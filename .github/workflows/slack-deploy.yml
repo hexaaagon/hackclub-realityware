@@ -25,6 +25,6 @@ jobs:
             git pull origin main
 
             cd apps/bot
-            /usr/local/bin/bun install ---frozen-lockfile
+            /usr/local/bin/bun install --frozen-lockfile
 
-            systemctl restart realityware-bot.service
+            systemctl restart realityware-bot.service --no-block
