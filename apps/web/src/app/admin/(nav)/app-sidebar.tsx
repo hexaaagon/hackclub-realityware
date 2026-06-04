@@ -17,14 +17,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { navs } from "./links";
+import { navs } from "./_links";
 
 export type UserResponse = Exclude<
   InferResponseType<typeof client.user.$get>,
   string
 >;
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar(
+  { ...props }: React.ComponentProps<typeof Sidebar>,
+  //& {
+  //  permissions: string[];
+  //}
+) {
   const account = useSWR<UserResponse>("api/user", async () => {
     const data = await client.user.$get({});
 

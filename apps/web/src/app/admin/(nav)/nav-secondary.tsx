@@ -2,8 +2,8 @@
 
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import { type ReactNode, useEffect, useState } from "react";
+import { useTheme } from "@/components/theme-provider";
 import {
   SidebarGroup,
   SidebarGroupContent,
