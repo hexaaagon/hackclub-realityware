@@ -1,14 +1,12 @@
-"use client";
-
+"use server";
+import { SiteBody } from "@/app/admin/(nav)/site-body";
+import { SiteHeader } from "@/app/admin/(nav)/site-header";
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
-import { adminCrumbs } from "../../(nav)/_breadcrumb";
-import { SiteBody } from "../../(nav)/site-body";
-import { SiteHeader } from "../../(nav)/site-header";
 
-export default function Page() {
+export default async function Page() {
   return (
     <>
-      <SiteHeader breadcrumbs={adminCrumbs} />
+      <SiteHeader type="fulfillment" />
       <SiteBody>
         <ChartAreaInteractive />
       </SiteBody>

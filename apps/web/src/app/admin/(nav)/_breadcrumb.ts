@@ -88,43 +88,69 @@ export const adminCrumbs: Bread[] = [
   {
     type: "static",
     title: "Community Events",
-    url: "/admin/community-events",
+    url: "/admin/events",
   },
   {
     type: "dynamic",
     title: (params) => `${params[0]}`,
-    url: "/admin/community-events/*",
+    url: "/admin/events/*",
   },
   {
     type: "static",
     title: "Overview",
-    url: "/admin/community-events/*/overview",
+    url: "/admin/events/*/overview",
   },
   {
     type: "static",
     title: "Attendees",
-    url: "/admin/community-events/*/attendees",
+    url: "/admin/events/*/attendees",
   },
   {
     type: "static",
     title: "Edit",
-    url: "/admin/community-events/*/edit",
+    url: "/admin/events/*/edit",
   },
   {
     type: "static",
     title: "Audit Log",
-    url: "/admin/community-events/*/audit-log",
+    url: "/admin/events/*/audit-log",
   },
 
   // Audit Logs
   {
     type: "static",
     title: "Audit Logs",
-    url: "/admin/audit-logs",
+    url: "/admin/audit-log",
   },
   {
     type: "dynamic",
     title: (params) => `${params[0]}`,
-    url: "/admin/audit-logs/*",
+    url: "/admin/audit-log/*",
+  },
+];
+
+export const reviewCrumbs: Bread[] = [
+  {
+    type: "static",
+    title: "Reviewer Dashboard",
+    url: "/admin/reviewer",
+  },
+  {
+    type: "static",
+    title: "Submissions",
+    url: "/admin/reviewer/submissions",
+  },
+];
+
+export const fulfillmentCrumbs: Bread[] = [
+  {
+    type: "static",
+    title: "Fulfillment Dashboard",
+    url: "/admin/fulfillment",
+  },
+  {
+    type: "static",
+    title: "Orders",
+    url: "/admin/fulfillment/orders",
   },
 ];
