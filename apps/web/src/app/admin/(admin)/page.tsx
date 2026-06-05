@@ -8,6 +8,9 @@ export default async function Page() {
     <>
       <SiteHeader type="admin" />
       <SiteBody>
+        <div>
+          <h2 className="text-2xl">Dashboard</h2>
+        </div>
         <ChartAreaInteractive />
       </SiteBody>
     </>

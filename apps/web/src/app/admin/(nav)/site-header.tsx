@@ -1,10 +1,29 @@
 "use client";
 
 import { CaretRightIcon } from "@phosphor-icons/react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   adminCrumbs,
   type Bread,
@@ -30,6 +49,7 @@ export function SiteHeader({
     s: string[];
   }[];
 }) {
+  const isMobile = useIsMobile();
   const pathname = usePathname();
 
   const breadcrumb = breadcrumbs[type] || [];
@@ -59,7 +79,6 @@ export function SiteHeader({
         title,
       };
     });
-  const currentCrumb = crumbs[crumbs.length - 1];
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -69,22 +88,67 @@ export function SiteHeader({
           orientation="vertical"
           className="my-auto mr-2 data-[orientation=vertical]:h-4"
         />
-        <div className="flex gap-1.5 items-center">
-          {crumbs.map((crumb, i) => (
-            <Fragment key={`${crumb.url}`}>
-              {i > 0 && <CaretRightIcon className="size-3" />}
-              <div
-                className={`text-sm font-medium ${
-                  crumb === currentCrumb
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {crumb.title}
-              </div>
-            </Fragment>
-          ))}
-        </div>
+        <Breadcrumb>
+          <BreadcrumbList>
+            {crumbs.map((crumb, i) => {
+              const isLast = i === crumbs.length - 1;
+
+              // if mobile and more than 2 crumbs
+              if (isMobile && crumbs.length > 2) {
+                // if not the first or last crumb
+                if (i !== 0 && i !== crumbs.length - 1) {
+                  if (i === 1) {
+                    const remainingCrumbs = crumbs.slice(1, -1);
+
+                    return (
+                      <Fragment key="ellipsis">
+                        <BreadcrumbItem>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button size="icon-sm" variant="ghost">
+                                <BreadcrumbEllipsis />
+                                <span className="sr-only">Toggle menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                              <DropdownMenuGroup>
+                                {remainingCrumbs.map((crumb) => (
+                                  <DropdownMenuItem key={crumb.url}>
+                                    <Link href={crumb.url.replaceAll("/*", "")}>
+                                      {crumb.title}
+                                    </Link>
+                                  </DropdownMenuItem>
+                                ))}
+                              </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                      </Fragment>
+                    );
+                  }
+                }
+              }
+
+              return (
+                <Fragment key={crumb.url}>
+                  <BreadcrumbItem>
+                    {isLast ? (
+                      <BreadcrumbPage>{crumb.title}</BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink asChild>
+                        <Link href={crumb.url.replaceAll("/*", "")}>
+                          {crumb.title}
+                        </Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                  {!isLast && <BreadcrumbSeparator />}
+                </Fragment>
+              );
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
     </header>
   );

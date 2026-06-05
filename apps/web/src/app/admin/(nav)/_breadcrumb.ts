@@ -125,7 +125,12 @@ export const adminCrumbs: Bread[] = [
   {
     type: "dynamic",
     title: (params) => `${params[0]}`,
-    url: "/admin/audit-log/*",
+    url: "/admin/audit-logs",
+  },
+  {
+    type: "static",
+    title: "Overview",
+    url: "/admin/audit-log/debug-test",
   },
 ];
 
