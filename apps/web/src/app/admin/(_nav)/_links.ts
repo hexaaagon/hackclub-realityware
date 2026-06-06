@@ -66,23 +66,6 @@ export const adminNav: NavSection = {
   ],
 };
 
-export const reviewerNav: NavSection = {
-  title: "Reviewer",
-  permissions: reviewerPermissions,
-  links: [
-    {
-      title: "Dashboard",
-      url: "/admin/reviewer",
-      icon: AddressBookTabsIcon,
-    },
-    {
-      title: "Submissions",
-      url: "/admin/reviewer/submissions/*",
-      icon: PaperPlaneIcon,
-    },
-  ],
-};
-
 export const fulfillmentNav: NavSection = {
   title: "Fulfillment",
   permissions: fulfillmentPermissions,
@@ -100,4 +83,21 @@ export const fulfillmentNav: NavSection = {
   ],
 };
 
-export const navs = [adminNav, reviewerNav, fulfillmentNav];
+export const reviewerNav: NavSection = {
+  title: "Reviewer",
+  permissions: reviewerPermissions,
+  links: [
+    {
+      title: "Dashboard",
+      url: "/admin/reviewer",
+      icon: AddressBookTabsIcon,
+    },
+    {
+      title: "Submissions",
+      url: "/admin/reviewer/submissions/*",
+      icon: PaperPlaneIcon,
+    },
+  ],
+};
+
+export const navs = [adminNav, fulfillmentNav, reviewerNav];

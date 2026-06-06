@@ -1,15 +1,13 @@
 "use server";
-import { SiteBody } from "@/app/admin/(_nav)/site-body";
-import { SiteHeader } from "@/app/admin/(_nav)/site-header";
 import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 
-export default async function Page() {
+export default async function AuditLogPage() {
   return (
-    <>
-      <SiteHeader type="admin" />
-      <SiteBody>
-        <ChartAreaInteractive />
-      </SiteBody>
-    </>
+    <main>
+      <div>
+        <h2 className="text-2xl">Audit Log</h2>
+      </div>
+      <ChartAreaInteractive />
+    </main>
   );
 }
