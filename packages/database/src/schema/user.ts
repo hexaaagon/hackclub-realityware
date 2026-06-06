@@ -1,6 +1,7 @@
 import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
+export type UserPermission = (typeof userPermissionEnum.enumValues)[number];
 export const userPermissionEnum = pgEnum("user_permissions", [
   "member",
   "reviewer",

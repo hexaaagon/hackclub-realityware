@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUDownLeftIcon } from "@phosphor-icons/react";
+import type { UserPermission } from "@realityware/database/schema/user";
 import { client } from "@realityware/rpc-backend";
 import type { InferResponseType } from "hono/client";
 import Link from "next/link";
@@ -24,12 +25,12 @@ export type UserResponse = Exclude<
   string
 >;
 
-export function AppSidebar(
-  { ...props }: React.ComponentProps<typeof Sidebar>,
-  //& {
-  //  permissions: string[];
-  //}
-) {
+export function AppSidebar({
+  permissions,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & {
+  permissions: UserPermission[];
+}) {
   const account = useSWR<UserResponse>("api/user", async () => {
     const data = await client.user.$get({});
 
@@ -64,6 +65,8 @@ export function AppSidebar(
       </SidebarHeader>
       <SidebarContent>
         {navs.map((nav) => {
+          if (!permissions.some((perm) => nav.permissions?.includes(perm))) return null;
+
           return <NavBody key={nav.title} items={nav} />;
         })}
       </SidebarContent>

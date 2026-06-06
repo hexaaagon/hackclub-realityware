@@ -11,11 +11,16 @@ import {
   TerminalWindowIcon,
   UsersIcon,
 } from "@phosphor-icons/react";
-import type { userPermissionEnum } from "@realityware/database/schema/user";
+import type { UserPermission } from "@realityware/database/schema/user";
+import {
+  adminPermissions,
+  fulfillmentPermissions,
+  reviewerPermissions,
+} from "./_permissions";
 
 export type NavSection = {
   title: string;
-  permissions?: (typeof userPermissionEnum.enumValues)[number][];
+  permissions?: UserPermission[];
   links: NavLink[];
 };
 export type NavLink = {
@@ -26,7 +31,7 @@ export type NavLink = {
 
 export const adminNav: NavSection = {
   title: "Admin",
-  permissions: ["admin"],
+  permissions: adminPermissions,
   links: [
     {
       title: "Dashboard",
@@ -63,7 +68,7 @@ export const adminNav: NavSection = {
 
 export const reviewerNav: NavSection = {
   title: "Reviewer",
-  permissions: ["admin", "reviewer"],
+  permissions: reviewerPermissions,
   links: [
     {
       title: "Dashboard",
@@ -80,7 +85,7 @@ export const reviewerNav: NavSection = {
 
 export const fulfillmentNav: NavSection = {
   title: "Fulfillment",
-  permissions: ["admin", "fulfillment"],
+  permissions: fulfillmentPermissions,
   links: [
     {
       title: "Dashboard",

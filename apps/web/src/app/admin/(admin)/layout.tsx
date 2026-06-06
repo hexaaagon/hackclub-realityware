@@ -2,9 +2,10 @@ import { auth } from "@realityware/auth";
 import { db, eq } from "@realityware/database";
 import { account } from "@realityware/database/schema/user";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "./(nav)/app-sidebar";
+import { adminPermissions as permissions } from "../(nav)/_permissions";
+import { AppSidebar } from "../(nav)/app-sidebar";
 
 export default async function RootLayout({
   children,
@@ -21,8 +22,21 @@ export default async function RootLayout({
     .where(eq(account.userId, session?.user.id ?? ""))
     .limit(1);
 
-  if (!session || !(userData[0].permissions || []).includes("admin"))
-    return notFound();
+  if (!session || !userData[0].permissions) return notFound();
+
+  const matches = userData[0].permissions.some((perm) =>
+    permissions.includes(perm),
+  );
+  if (!matches) {
+    const memberMatch = userData[0].permissions.filter(
+      (perm) => perm !== "member",
+    );
+    if (memberMatch.length === 0) {
+      return notFound();
+    }
+
+    return redirect(`/admin/${memberMatch[0]}`);
+  }
 
   return (
     <SidebarProvider
@@ -33,7 +47,7 @@ export default async function RootLayout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset" permissions={userData[0].permissions} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
