@@ -7,8 +7,8 @@ import type { InferResponseType } from "hono/client";
 import Link from "next/link";
 import type * as React from "react";
 import useSWR from "swr";
-import { NavBody } from "@/app/admin/(nav)/nav-body";
-import { NavUser } from "@/app/admin/(nav)/nav-user";
+import { NavBody } from "@/app/admin/(_nav)/nav-body";
+import { NavUser } from "@/app/admin/(_nav)/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -65,7 +65,8 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         {navs.map((nav) => {
-          if (!permissions.some((perm) => nav.permissions?.includes(perm))) return null;
+          if (!permissions.some((perm) => nav.permissions?.includes(perm)))
+            return null;
 
           return <NavBody key={nav.title} items={nav} />;
         })}

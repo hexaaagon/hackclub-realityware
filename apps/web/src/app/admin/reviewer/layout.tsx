@@ -4,8 +4,8 @@ import { account } from "@realityware/database/schema/user";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { reviewerPermissions as permissions } from "../(nav)/_permissions";
-import { AppSidebar } from "../(nav)/app-sidebar";
+import { reviewerPermissions as permissions } from "../(_nav)/_permissions";
+import { AppSidebar } from "../(_nav)/app-sidebar";
 
 export default async function RootLayout({
   children,
