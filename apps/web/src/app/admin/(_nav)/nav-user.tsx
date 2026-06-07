@@ -26,13 +26,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import type { UserResponse } from "./app-sidebar";
 
-export function NavUser({
-  isLoading,
-  user,
-}: {
-  isLoading: boolean;
-  user: UserResponse | undefined;
-}) {
+export function NavUser({ user }: { user: UserResponse }) {
   const { isMobile } = useSidebar();
   const isSuccess = user?.success === true;
 
@@ -45,7 +39,7 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              {!isLoading && isSuccess ? (
+              {isSuccess ? (
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
                     src={user.account.avatar}
@@ -60,25 +54,21 @@ export function NavUser({
                   </AvatarFallback>
                 </Avatar>
               ) : (
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarFallback className="rounded-lg">
-                    <Skeleton className="h-full w-full" />
-                  </AvatarFallback>
-                </Avatar>
+                <Skeleton className="h-8 w-8 rounded-full" />
               )}
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
-                  {!isLoading && isSuccess ? (
+                  {isSuccess ? (
                     user.account.displayName
                   ) : (
-                    <Skeleton className="h-full w-16" />
+                    <Skeleton className="h-3 w-2/3" />
                   )}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {!isLoading && isSuccess ? (
+                  {isSuccess ? (
                     user.account.email
                   ) : (
-                    <Skeleton className="h-full w-8" />
+                    <Skeleton className="h-2.5 w-1/3 mt-1" />
                   )}
                 </span>
               </div>

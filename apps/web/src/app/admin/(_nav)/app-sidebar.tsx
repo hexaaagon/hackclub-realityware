@@ -2,11 +2,11 @@
 
 import { ArrowUDownLeftIcon } from "@phosphor-icons/react";
 import type { UserPermission } from "@realityware/database/schema/user";
-import { client } from "@realityware/rpc-backend";
+import type { client } from "@realityware/rpc-backend";
 import type { InferResponseType } from "hono/client";
 import Link from "next/link";
 import type * as React from "react";
-import useSWR from "swr";
+import { useEffect, useState } from "react";
 import { NavBody } from "@/app/admin/(_nav)/nav-body";
 import { NavUser } from "@/app/admin/(_nav)/nav-user";
 import {
@@ -18,29 +18,25 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { navs } from "./_links";
+import { NavSecondary } from "./nav-secondary";
 
-export type UserResponse = Exclude<
+export type UserResponse = Extract<
   InferResponseType<typeof client.user.$get>,
-  string
+  { success: true }
 >;
 
 export function AppSidebar({
-  permissions,
+  user,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  permissions: UserPermission[];
+  user: UserResponse;
 }) {
-  const account = useSWR<UserResponse>("api/user", async () => {
-    const data = await client.user.$get({});
-
-    if (data.ok) {
-      const body = await data.json();
-      return body;
-    } else {
-      return { success: false as false };
-    }
-  });
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -64,15 +60,63 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {navs.map((nav) => {
-          if (!permissions.some((perm) => nav.permissions?.includes(perm)))
-            return null;
+        {isMounted ? (
+          navs.map((nav) => {
+            if (
+              !user.account.permissions?.some((perm) =>
+                nav.permissions?.includes(perm),
+              )
+            )
+              return null;
 
-          return <NavBody key={nav.title} items={nav} />;
-        })}
+            return <NavBody key={nav.title} items={nav} />;
+          })
+        ) : (
+          <div className="flex flex-col p-4 gap-8">
+            <div className="flex flex-col gap-3">
+              <Skeleton className="h-2 w-1/4" />
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Skeleton className="h-2 w-1/4" />
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+              <div className="flex gap-1.5">
+                <Skeleton className="h-4 w-4 rounded-full" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+            </div>
+          </div>
+        )}
+        <NavSecondary className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser isLoading={account.isLoading} user={account.data} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

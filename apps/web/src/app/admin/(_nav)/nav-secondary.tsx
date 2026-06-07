@@ -2,7 +2,7 @@
 
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "@/components/theme-provider";
 import {
   SidebarGroup,
@@ -13,15 +13,8 @@ import {
 } from "@/components/ui/sidebar";
 
 export function NavSecondary({
-  items,
   ...props
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon: ReactNode;
-  }[];
-} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+}: React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   const { resolvedTheme, theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
@@ -40,26 +33,15 @@ export function NavSecondary({
             <SidebarMenuItem
               onClick={() => {
                 const currentTheme = resolvedTheme ?? theme ?? "light";
-                console.log(currentTheme);
                 setTheme(currentTheme === "dark" ? "light" : "dark");
               }}
             >
-              <SidebarMenuButton>
+              <SidebarMenuButton size="sm">
                 {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
                 Toggle Theme
               </SidebarMenuButton>
             </SidebarMenuItem>
           ) : null}
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
-                <a href={item.url}>
-                  {item.icon}
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
