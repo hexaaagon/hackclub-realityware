@@ -1,5 +1,5 @@
 import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
-import { user } from "./auth";
+import { account } from "./user";
 
 export const itemCategoryEnum = pgEnum("shop_item_category", [
   "grant",
@@ -7,9 +7,9 @@ export const itemCategoryEnum = pgEnum("shop_item_category", [
 ]);
 export const item = pgTable("shop_item", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
-  addedBy: text("added_by")
+  addedBy: integer("added_by")
     .notNull()
-    .references(() => user.id),
+    .references(() => account.id),
   name: text("name").notNull(),
   description: text("description").notNull(),
   category: itemCategoryEnum("category").notNull(),

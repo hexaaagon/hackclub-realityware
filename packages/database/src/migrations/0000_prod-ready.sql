@@ -7,7 +7,7 @@ CREATE TYPE "public"."shop_item_category" AS ENUM('grant', 'items');--> statemen
 CREATE TYPE "public"."user_permissions" AS ENUM('member', 'reviewer', 'fulfillment', 'admin');--> statement-breakpoint
 CREATE TABLE "achievement" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "achievement_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"user_id" text NOT NULL,
+	"user_id" integer NOT NULL,
 	"name" text NOT NULL,
 	"description" text NOT NULL,
 	"icon_url" text NOT NULL
@@ -16,7 +16,7 @@ CREATE TABLE "achievement" (
 ALTER TABLE "achievement" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 CREATE TABLE "log_admin" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "log_admin_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"user_id" text NOT NULL,
+	"user_id" integer NOT NULL,
 	"action" "log_admin_action" NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
 	"data" jsonb
@@ -25,7 +25,7 @@ CREATE TABLE "log_admin" (
 ALTER TABLE "log_admin" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 CREATE TABLE "log_user" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "log_user_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"user_id" text NOT NULL,
+	"user_id" integer NOT NULL,
 	"action" "log_user_action" NOT NULL,
 	"createdAt" timestamp DEFAULT now() NOT NULL,
 	"data" jsonb
@@ -99,7 +99,7 @@ CREATE TABLE "hc_personal_info" (
 ALTER TABLE "hc_personal_info" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 CREATE TABLE "project" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "project_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"user_id" text NOT NULL,
+	"user_id" integer NOT NULL,
 	"type" "project_type" NOT NULL,
 	"name" text NOT NULL,
 	"description" text NOT NULL,
@@ -171,7 +171,7 @@ CREATE TABLE "reviewer_user_note" (
 ALTER TABLE "reviewer_user_note" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
 CREATE TABLE "shop_item" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "shop_item_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"added_by" text NOT NULL,
+	"added_by" integer NOT NULL,
 	"name" text NOT NULL,
 	"description" text NOT NULL,
 	"category" "shop_item_category" NOT NULL,
@@ -230,14 +230,14 @@ CREATE TABLE "user_account" (
 );
 --> statement-breakpoint
 ALTER TABLE "user_account" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
-ALTER TABLE "achievement" ADD CONSTRAINT "achievement_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "log_admin" ADD CONSTRAINT "log_admin_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "log_user" ADD CONSTRAINT "log_user_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "achievement" ADD CONSTRAINT "achievement_user_id_user_account_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "log_admin" ADD CONSTRAINT "log_admin_user_id_user_account_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "log_user" ADD CONSTRAINT "log_user_user_id_user_account_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "hc_personal_info" ADD CONSTRAINT "hc_personal_info_id_user_account_id_fk" FOREIGN KEY ("id") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "hc_personal_info" ADD CONSTRAINT "hc_personal_info_email_user_account_email_fk" FOREIGN KEY ("email") REFERENCES "public"."user_account"("email") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "project" ADD CONSTRAINT "project_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "project" ADD CONSTRAINT "project_user_id_user_account_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "project_shipped_status" ADD CONSTRAINT "project_shipped_status_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reviewer_approved_project" ADD CONSTRAINT "reviewer_approved_project_id_reviewer_project_id_fk" FOREIGN KEY ("id") REFERENCES "public"."reviewer_project"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reviewer_approved_project" ADD CONSTRAINT "reviewer_approved_project_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -253,7 +253,7 @@ ALTER TABLE "reviewer_project_note" ADD CONSTRAINT "reviewer_project_note_review
 ALTER TABLE "reviewer_project_note" ADD CONSTRAINT "reviewer_project_note_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reviewer_user_note" ADD CONSTRAINT "reviewer_user_note_reviewer_id_user_account_id_fk" FOREIGN KEY ("reviewer_id") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reviewer_user_note" ADD CONSTRAINT "reviewer_user_note_user_id_user_account_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "shop_item" ADD CONSTRAINT "shop_item_added_by_user_id_fk" FOREIGN KEY ("added_by") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "shop_item" ADD CONSTRAINT "shop_item_added_by_user_account_id_fk" FOREIGN KEY ("added_by") REFERENCES "public"."user_account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_account" ADD CONSTRAINT "user_account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_account" ADD CONSTRAINT "user_account_email_user_email_fk" FOREIGN KEY ("email") REFERENCES "public"."user"("email") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint

@@ -1,5 +1,5 @@
 {
-  "id": "9c4263d5-727c-4200-a26b-23e02b254133",
+  "id": "2e61bb49-45e8-4447-a90f-e468cf1eaf1e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -27,7 +27,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -52,10 +52,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "achievement_user_id_user_id_fk": {
-          "name": "achievement_user_id_user_id_fk",
+        "achievement_user_id_user_account_id_fk": {
+          "name": "achievement_user_id_user_account_id_fk",
           "tableFrom": "achievement",
-          "tableTo": "user",
+          "tableTo": "user_account",
           "columnsFrom": [
             "user_id"
           ],
@@ -95,7 +95,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -122,10 +122,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "log_admin_user_id_user_id_fk": {
-          "name": "log_admin_user_id_user_id_fk",
+        "log_admin_user_id_user_account_id_fk": {
+          "name": "log_admin_user_id_user_account_id_fk",
           "tableFrom": "log_admin",
-          "tableTo": "user",
+          "tableTo": "user_account",
           "columnsFrom": [
             "user_id"
           ],
@@ -165,7 +165,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -192,10 +192,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "log_user_user_id_user_id_fk": {
-          "name": "log_user_user_id_user_id_fk",
+        "log_user_user_id_user_account_id_fk": {
+          "name": "log_user_user_id_user_account_id_fk",
           "tableFrom": "log_user",
-          "tableTo": "user",
+          "tableTo": "user_account",
           "columnsFrom": [
             "user_id"
           ],
@@ -710,7 +710,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -754,10 +754,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "project_user_id_user_id_fk": {
-          "name": "project_user_id_user_id_fk",
+        "project_user_id_user_account_id_fk": {
+          "name": "project_user_id_user_account_id_fk",
           "tableFrom": "project",
-          "tableTo": "user",
+          "tableTo": "user_account",
           "columnsFrom": [
             "user_id"
           ],
@@ -1326,7 +1326,7 @@
         },
         "added_by": {
           "name": "added_by",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -1358,10 +1358,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "shop_item_added_by_user_id_fk": {
-          "name": "shop_item_added_by_user_id_fk",
+        "shop_item_added_by_user_account_id_fk": {
+          "name": "shop_item_added_by_user_account_id_fk",
           "tableFrom": "shop_item",
-          "tableTo": "user",
+          "tableTo": "user_account",
           "columnsFrom": [
             "added_by"
           ],

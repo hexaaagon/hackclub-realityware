@@ -1,5 +1,5 @@
 import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { user } from "./auth";
+import { account } from "./user";
 
 export const projectTypeEnum = pgEnum("project_type", [
   "software-web",
@@ -12,9 +12,9 @@ export const projectTypeEnum = pgEnum("project_type", [
 ]);
 export const project = pgTable("project", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
-  userId: text("user_id")
+  userId: integer("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => account.id),
   type: projectTypeEnum("type").notNull(),
   name: text("name").notNull(),
   description: text("description").notNull(),

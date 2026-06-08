@@ -6,7 +6,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { user } from "./auth";
+import { account } from "./user";
 
 export const userActionEnum = pgEnum("log_user_action", [
   "user-modify",
@@ -16,9 +16,9 @@ export const userActionEnum = pgEnum("log_user_action", [
 ]);
 export const logUser = pgTable("log_user", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
-  userId: text("user_id")
+  userId: integer("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => account.id),
   action: userActionEnum().notNull(),
   createdAt: timestamp().defaultNow().notNull(),
   data: jsonb(),
@@ -37,9 +37,9 @@ export const adminActionEnum = pgEnum("log_admin_action", [
 ]);
 export const logAdmin = pgTable("log_admin", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey().notNull(),
-  userId: text("user_id")
+  userId: integer("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => account.id),
   action: adminActionEnum().notNull(),
   createdAt: timestamp().defaultNow().notNull(),
   data: jsonb(),

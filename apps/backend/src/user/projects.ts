@@ -7,27 +7,23 @@ import {
   shippedProject,
 } from "@realityware/database/schema/project";
 import z from "zod";
+import { authMiddleware } from "../../lib/auth";
 import { HonoApp } from "../app";
 
 export const userProjectRouter = HonoApp()
-  .get("/", async (c) => {
-    const session = await auth.api.getSession({
-      headers: c.req.raw.headers,
-    });
-
-    if (!session) {
-      return c.json({ projects: [] });
-    }
+  .get("/", authMiddleware(), async (c) => {
+    const account = c.get("account");
 
     const projects = await db
       .select()
       .from(project)
-      .where(eq(project.userId, session.user.id));
+      .where(eq(project.userId, account.id));
 
     return c.json({ projects });
   })
   .post(
     "/",
+    authMiddleware(),
     zValidator(
       "json",
       z.object({
@@ -40,20 +36,13 @@ export const userProjectRouter = HonoApp()
       }),
     ),
     async (c) => {
-      const session = await auth.api.getSession({
-        headers: c.req.raw.headers,
-      });
-
-      if (!session) {
-        return c.json({ project: null });
-      }
-
+      const account = c.get("account");
       const data = c.req.valid("json");
 
       const [newProject] = await db
         .insert(project)
         .values({
-          userId: session.user.id,
+          userId: account.id,
           ...data,
         })
         .returning();
@@ -61,29 +50,21 @@ export const userProjectRouter = HonoApp()
       return c.json({ project: newProject });
     },
   )
-  .get("/:id", async (c) => {
-    const session = await auth.api.getSession({
-      headers: c.req.raw.headers,
-    });
-
-    if (!session) {
-      return c.json({ project: null });
-    }
-
+  .get("/:id", authMiddleware(), async (c) => {
+    const account = c.get("account");
     const { id } = c.req.param();
 
     const projectData = await db
       .select()
       .from(project)
-      .where(
-        and(eq(project.id, Number(id)), eq(project.userId, session.user.id)),
-      )
+      .where(and(eq(project.id, Number(id)), eq(project.userId, account.id)))
       .then((res) => res[0]);
 
     return c.json({ project: projectData });
   })
   .patch(
     "/:id",
+    authMiddleware(),
     zValidator(
       "json",
       z.object({
@@ -96,14 +77,7 @@ export const userProjectRouter = HonoApp()
       }),
     ),
     async (c) => {
-      const session = await auth.api.getSession({
-        headers: c.req.raw.headers,
-      });
-
-      if (!session) {
-        return c.json({ project: null });
-      }
-
+      const account = c.get("account");
       const { id } = c.req.param();
 
       const data = c.req.valid("json");
@@ -111,50 +85,30 @@ export const userProjectRouter = HonoApp()
       const [updatedProject] = await db
         .update(project)
         .set(data)
-        .where(
-          and(eq(project.id, Number(id)), eq(project.userId, session.user.id)),
-        )
+        .where(and(eq(project.id, Number(id)), eq(project.userId, account.id)))
         .returning();
 
       return c.json({ project: updatedProject });
     },
   )
-  .delete("/:id", async (c) => {
-    const session = await auth.api.getSession({
-      headers: c.req.raw.headers,
-    });
-
-    if (!session) {
-      return c.json({ success: false });
-    }
-
+  .delete("/:id", authMiddleware(), async (c) => {
+    const account = c.get("account");
     const { id } = c.req.param();
 
     await db
       .delete(project)
-      .where(
-        and(eq(project.id, Number(id)), eq(project.userId, session.user.id)),
-      );
+      .where(and(eq(project.id, Number(id)), eq(project.userId, account.id)));
 
     return c.json({ success: true });
   })
-  .post("/:id/ship", async (c) => {
-    const session = await auth.api.getSession({
-      headers: c.req.raw.headers,
-    });
-
-    if (!session) {
-      return c.json({ success: false });
-    }
-
+  .post("/:id/ship", authMiddleware(), async (c) => {
+    const account = c.get("account");
     const { id } = c.req.param();
 
     const projectData = await db
       .select()
       .from(project)
-      .where(
-        and(eq(project.id, Number(id)), eq(project.userId, session.user.id)),
-      )
+      .where(and(eq(project.id, Number(id)), eq(project.userId, account.id)))
       .then((res) => res[0]);
 
     if (!projectData) {
