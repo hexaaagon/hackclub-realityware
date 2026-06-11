@@ -3,7 +3,6 @@ import {
   jsonb,
   pgEnum,
   pgTable,
-  text,
   timestamp,
 } from "drizzle-orm/pg-core";
 import { account } from "./user";

@@ -8,7 +8,7 @@ export function SiteBody({
   return (
     <div
       className={cn(
-        "@container/main flex flex-1 flex-col gap-4 p-4 md:gap-6 md:p-6",
+        "@container/main flex flex-1 flex-col gap-4 px-4 p-2 md:gap-6 md:px-3 md:p-6",
         className,
       )}
       {...props}

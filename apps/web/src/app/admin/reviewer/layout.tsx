@@ -44,6 +44,7 @@ export default async function RootLayout({
         {
           "--sidebar-width": "calc(var(--spacing) * 72)",
           "--header-height": "calc(var(--spacing) * 12)",
+          "--radius": "8px",
         } as React.CSSProperties
       }
     >

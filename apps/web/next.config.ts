@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   ],
   experimental: {
     optimizePackageImports: [
-      "@icons-pack/react-simple-icons",
+      "@phosphor-icons/react",
       // "@paper-design/shaders-react",
     ],
   },
