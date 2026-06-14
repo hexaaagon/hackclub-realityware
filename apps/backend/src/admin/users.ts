@@ -10,19 +10,39 @@ export const adminUserRouter = HonoApp()
     const users = await db.select().from(account);
     return c.json({ success: true, users });
   })
-  .get("/:id", authMiddleware("admin"), async (c) => {
-    const { id } = c.req.param();
-    const user = await db
-      .select()
-      .from(account)
-      .where(eq(account.id, Number(id)))
-      .then(([user]) => user);
+  .get(
+    "/:id",
+    authMiddleware("admin"),
+    zValidator(
+      "param",
+      z.object({
+        id: z.string().regex(/^\d+$/).transform(Number),
+      }),
+    ),
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const user = await db
+        .select()
+        .from(account)
+        .where(eq(account.id, id))
+        .then(([user]) => user);
 
-    return c.json({ user });
-  })
+      if (!user) {
+        return c.json({ success: false, message: "User not found" }, 404);
+      }
+
+      return c.json({ success: true, user });
+    },
+  )
   .patch(
     "/:id",
     authMiddleware("admin"),
+    zValidator(
+      "param",
+      z.object({
+        id: z.string().regex(/^\d+$/).transform(Number),
+      }),
+    ),
     zValidator(
       "json",
       z.object({
@@ -31,8 +51,8 @@ export const adminUserRouter = HonoApp()
       }),
     ),
     async (c) => {
-      const body = await c.req.json();
-      const { id } = c.req.param();
+      const body = c.req.valid("json");
+      const { id } = c.req.valid("param");
 
       const updatedUser = await db
         .update(account)
@@ -40,10 +60,10 @@ export const adminUserRouter = HonoApp()
           displayName: body.name,
           shards: body.shards,
         })
-        .where(eq(account.id, Number(id)))
+        .where(eq(account.id, id))
         .returning()
         .then(([user]) => user);
 
-      return c.json({ user: updatedUser });
+      return c.json({ success: true, user: updatedUser });
     },
   );

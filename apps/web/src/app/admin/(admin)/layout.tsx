@@ -4,8 +4,6 @@ import { notFound, redirect } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { adminPermissions as permissions } from "../(_nav)/_permissions";
 import { AppSidebar } from "../(_nav)/app-sidebar";
-import { SiteBody } from "../(_nav)/site-body";
-import { SiteHeader } from "../(_nav)/site-header";
 
 export default async function RootLayout({
   children,
@@ -49,10 +47,7 @@ export default async function RootLayout({
       }
     >
       <AppSidebar variant="inset" user={user} />
-      <SidebarInset>
-        <SiteHeader type="admin" />
-        <SiteBody>{children}</SiteBody>
-      </SidebarInset>
+      <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
 }
