@@ -10,10 +10,10 @@ export const userContext = createContext<Account>({} as any);
 
 export function ContextProvider({
   children,
-  content
+  content,
 }: {
   children: React.ReactNode;
-  content: { user: Account["user"] }
+  content: { user: Account["user"] };
 }) {
   const [user, setUser] = useState<typeof account.$inferSelect>(content.user);
 
@@ -26,5 +26,5 @@ export function ContextProvider({
     <userContext.Provider value={{ ...shareDataUseState }}>
       {children}
     </userContext.Provider>
-  )
+  );
 }

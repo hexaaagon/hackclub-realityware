@@ -4,5 +4,5 @@ import { type RouterRoutes, router } from "./routes";
 export const app = HonoApp().basePath("/api");
 export type AppType = RouterRoutes;
 
-export { router }
+export { router };
 app.route("/", router);

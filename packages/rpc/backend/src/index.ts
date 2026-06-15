@@ -8,8 +8,8 @@ const baseUrl =
 
 export type { backendRouter };
 
-export type Client = ReturnType<typeof hc<typeof backendRouter>>
+export type Client = ReturnType<typeof hc<typeof backendRouter>>;
 export const hcWithType = (...args: Parameters<typeof hc>): Client =>
-  hc<typeof backendRouter>(...args)
+  hc<typeof backendRouter>(...args);
 
 export const client = hcWithType(baseUrl);
