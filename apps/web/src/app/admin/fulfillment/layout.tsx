@@ -9,9 +9,7 @@ import { SiteHeader } from "../(_nav)/site-header";
 
 export default async function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: LayoutProps<"/admin/fulfillment">) {
   const header = await headers();
   const user = await (
     await client.user.$get(

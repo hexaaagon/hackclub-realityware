@@ -7,14 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": [
-      "src/**/*.ts",
-      "src/**/*.tsx",
-      "src/**/*.js",
-      "src/**/*.jsx",
-      "app/**/*.ts",
-      "app/**/*.tsx"
-    ]
+    "includes": ["**", "!**/dist", "!**/build", "!**/.next", "!**/node_modules"]
   },
   "formatter": {
     "enabled": true,
