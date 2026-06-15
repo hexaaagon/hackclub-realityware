@@ -1,6 +1,5 @@
 "use client";
 
-import { CaretRightIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
@@ -46,7 +45,7 @@ export function SiteHeader({
   type: "admin" | "review" | "fulfillment";
   params?: {
     i: number;
-    s: string[];
+    s: (string | number)[];
   }[];
 }) {
   const isMobile = useIsMobile();
@@ -55,7 +54,15 @@ export function SiteHeader({
   const breadcrumb = breadcrumbs[type] || [];
   const crumbs = breadcrumb
     .filter((crumb) => {
-      const crumbSegments = crumb.url.split("/").filter(Boolean);
+      const param =
+        crumb.type === "dynamic"
+          ? params?.find((p, i) => p.i === i)
+          : undefined;
+      const crumbUrl =
+        crumb.type === "dynamic" && crumb.url instanceof Function
+          ? crumb.url(param ? param.s : [])
+          : (crumb.url as string);
+      const crumbSegments = crumbUrl.split("/").filter(Boolean);
       const pathSegments = pathname.split("/").filter(Boolean);
 
       if (crumbSegments.length > pathSegments.length) return false;
@@ -72,11 +79,16 @@ export function SiteHeader({
 
       const param = params?.find((p) => p.i === i);
       const title = param ? crumb.title(param.s) : crumb.title([]);
+      const url =
+        crumb.type === "dynamic" && crumb.url instanceof Function
+          ? crumb.url(param ? param.s : [])
+          : (crumb.url as string);
 
       return {
         ...crumb,
         type: "static",
         title,
+        url,
       };
     });
 

@@ -6,8 +6,8 @@ export type BreadStatic = {
 };
 export type BreadDynamic = {
   type: "dynamic";
-  title: (params: string[]) => string;
-  url: string;
+  title: (params: (string | number)[]) => string;
+  url: ((params: (string | number)[]) => string) | string;
 };
 
 export const adminCrumbs: Bread[] = [
@@ -27,7 +27,7 @@ export const adminCrumbs: Bread[] = [
   {
     type: "dynamic",
     title: (params) => `${params[0]}`,
-    url: "/admin/users/*",
+    url: (params) => `/admin/users/${params[1] || "*"}`,
   },
   {
     type: "static",

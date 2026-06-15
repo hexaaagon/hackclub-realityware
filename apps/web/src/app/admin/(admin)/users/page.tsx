@@ -43,15 +43,15 @@ export default async function UsersPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-2xl">Users</h2>
           </div>
-          <Table className="rounded-xl overflow-hidden">
+          <Table className="overflow-hidden rounded-xl">
             <TableHeader className="bg-accent">
               <TableRow className="hover:bg-transparent">
-                <TableHead className="w-8 px-4 rounded-tl-xl">ID</TableHead>
+                <TableHead className="w-8 rounded-tl-xl px-4">ID</TableHead>
                 <TableHead>User</TableHead>
                 <TableHead className="hidden lg:table-cell">Email</TableHead>
                 <TableHead>Shards</TableHead>
                 <TableHead className="hidden md:table-cell">Role</TableHead>
-                <TableHead className="w-0 pr-4 rounded-tr-xl text-end">
+                <TableHead className="w-0 rounded-tr-xl pr-4 text-end">
                   Actions
                 </TableHead>
               </TableRow>
@@ -62,7 +62,7 @@ export default async function UsersPage() {
                   key={item.id}
                   className={idx % 2 ? "bg-secondary/40" : "bg-secondary/20"}
                 >
-                  <TableCell className="text-muted-foreground font-mono text-center">
+                  <TableCell className="text-center font-mono text-muted-foreground">
                     {item.id}
                   </TableCell>
                   <TableCell>
@@ -79,12 +79,12 @@ export default async function UsersPage() {
                             .map((name) => name.charAt(0))}
                         </AvatarFallback>
                       </Avatar>
-                      <div className="leading-2.5 h-full flex flex-col justify-center">
+                      <div className="flex h-full flex-col justify-center leading-2.5">
                         <div className="font-medium">{item.displayName}</div>
                         <Link
                           href={`https://hackclub.slack.com/team/${item.slackId}`}
                           target="_blank"
-                          className="text-muted-foreground hover:px-2 hover:bg-accent transition-all flex gap-1 items-center mt-0.5 text-xs"
+                          className="mt-0.5 flex items-center gap-1 text-muted-foreground text-xs transition-all hover:bg-accent hover:px-2"
                         >
                           <ArrowSquareOutIcon /> {item.slackId}
                         </Link>
@@ -101,7 +101,7 @@ export default async function UsersPage() {
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <div className="flex items-center gap-2 ">
+                    <div className="flex items-center gap-2">
                       {(item.permissions || ["member"]).map((permission) => (
                         <Badge
                           key={permission}
@@ -115,9 +115,9 @@ export default async function UsersPage() {
                     </div>
                   </TableCell>
                   <TableCell className="flex justify-end">
-                    <div className="flex h-full w-max ml-auto items-center gap-1">
+                    <div className="ml-auto flex h-full w-max items-center gap-1">
                       <Link
-                        href={`/admin/users/${item.id}`}
+                        href={`/admin/users/${item.id}/overview`}
                         className={buttonVariants({ variant: "ghost" })}
                       >
                         <EyeIcon />
