@@ -13,15 +13,16 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "types": ["bun", "node"],
     "plugins": [
       {
-        "name": "next"
-      }
+        "name": "next",
+      },
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "#/*": ["./public/static/*"]
-    }
+      "#/*": ["./public/static/*"],
+    },
   },
   "include": [
     "next-env.d.ts",
@@ -32,7 +33,7 @@
     "**/*.mts",
     "../backend/src/index.ts",
     "../backend/src/app.ts",
-    "../backend/src/routes.ts"
+    "../backend/src/routes.ts",
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
