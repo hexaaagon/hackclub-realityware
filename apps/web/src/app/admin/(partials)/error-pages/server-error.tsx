@@ -17,19 +17,19 @@ import {
 
 export default function ServerError({ reason }: { reason: string | object }) {
   return (
-    <div className="h-full w-full flex justify-center items-center">
+    <div className="flex h-full w-full items-center justify-center">
       <Empty>
         <EmptyHeader>
           <EmptyMedia className="size-16!" variant="icon">
-            <WarningIcon className="text-red-600! size-12!" />
+            <WarningIcon className="size-12! text-red-600!" />
           </EmptyMedia>
-          <EmptyTitle className="text-2xl font-semibold">
+          <EmptyTitle className="font-semibold text-2xl">
             There's an error in our side.
           </EmptyTitle>
           <EmptyDescription>Please contact @hexaa for this.</EmptyDescription>
         </EmptyHeader>
         <EmptyContent className="text-left md:max-w-2/3">
-          <pre className="font-mono bg-muted overflow-x-auto max-w-full text-xs p-2 rounded-md">
+          <pre className="max-w-full overflow-x-auto rounded-md bg-muted p-2 font-mono text-xs">
             {typeof reason === "string"
               ? reason
               : JSON.stringify(reason, null, 2)}

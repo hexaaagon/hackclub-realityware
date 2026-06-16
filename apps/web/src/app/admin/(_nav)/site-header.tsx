@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Fragment } from "react";
+import { createContext, Fragment, useContext } from "react";
+import type { UrlObject } from "url";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -29,25 +30,26 @@ import {
   fulfillmentCrumbs,
   reviewCrumbs,
 } from "./_breadcrumb";
+import { breadCrumbContext } from "./site-provider";
 
-const breadcrumbs: {
-  [key: string]: Bread[];
-} = {
+const breadcrumbs = {
+  loading: [{ type: "static", title: "Loading...", url: "" }],
   admin: adminCrumbs,
   review: reviewCrumbs,
   fulfillment: fulfillmentCrumbs,
-};
+} as const satisfies Record<string, readonly Bread[]>;
 
-export function SiteHeader({
-  type,
-  params,
-}: {
-  type: "admin" | "review" | "fulfillment";
+export type BreadCrumbOptions = {
+  type: keyof typeof breadcrumbs;
   params?: {
     i: number;
     s: (string | number)[];
   }[];
-}) {
+};
+
+export function SiteHeader() {
+  const { type, params } = useContext(breadCrumbContext);
+
   const isMobile = useIsMobile();
   const pathname = usePathname();
 
@@ -126,7 +128,14 @@ export function SiteHeader({
                               <DropdownMenuGroup>
                                 {remainingCrumbs.map((crumb) => (
                                   <DropdownMenuItem key={crumb.url}>
-                                    <Link href={crumb.url.replaceAll("/*", "")}>
+                                    <Link
+                                      href={
+                                        crumb.url.replaceAll(
+                                          "/*",
+                                          "",
+                                        ) as unknown as UrlObject
+                                      }
+                                    >
                                       {crumb.title}
                                     </Link>
                                   </DropdownMenuItem>
@@ -149,7 +158,14 @@ export function SiteHeader({
                       <BreadcrumbPage>{crumb.title}</BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild>
-                        <Link href={crumb.url.replaceAll("/*", "")}>
+                        <Link
+                          href={
+                            crumb.url.replaceAll(
+                              "/*",
+                              "",
+                            ) as unknown as UrlObject
+                          }
+                        >
                           {crumb.title}
                         </Link>
                       </BreadcrumbLink>

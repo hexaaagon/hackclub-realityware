@@ -6,6 +6,7 @@ import { reviewerPermissions as permissions } from "../(_nav)/_permissions";
 import { AppSidebar } from "../(_nav)/app-sidebar";
 import { SiteBody } from "../(_nav)/site-body";
 import { SiteHeader } from "../(_nav)/site-header";
+import { BreadCrumbContextProvider } from "../(_nav)/site-provider";
 
 export default async function RootLayout({
   children,
@@ -33,7 +34,7 @@ export default async function RootLayout({
       return notFound();
     }
 
-    return redirect(`/admin/${memberMatch[0]}`);
+    return redirect(`/admin/${memberMatch[0]}` as unknown as any);
   }
 
   return (
@@ -46,11 +47,13 @@ export default async function RootLayout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" user={user} />
-      <SidebarInset>
-        <SiteHeader type="review" />
-        <SiteBody>{children}</SiteBody>
-      </SidebarInset>
+      <BreadCrumbContextProvider type="review">
+        <AppSidebar variant="inset" user={user} />
+        <SidebarInset>
+          <SiteHeader />
+          <SiteBody>{children}</SiteBody>
+        </SidebarInset>
+      </BreadCrumbContextProvider>
     </SidebarProvider>
   );
 }
