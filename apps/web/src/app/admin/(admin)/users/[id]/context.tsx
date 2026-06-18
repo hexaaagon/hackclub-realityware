@@ -1,10 +1,10 @@
 "use client";
-import type { account } from "@realityware/database/schema/user";
+import type { UserInfo } from "@realityware/database/types/user.d";
 import { createContext, useState } from "react";
 
 export type ContextUser = {
-  user: typeof account.$inferSelect;
-  setUser: React.Dispatch<React.SetStateAction<typeof account.$inferSelect>>;
+  user: UserInfo;
+  setUser: React.Dispatch<React.SetStateAction<UserInfo>>;
 };
 export const userContext = createContext<ContextUser>({} as any);
 

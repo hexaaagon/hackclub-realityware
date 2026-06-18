@@ -1,13 +1,16 @@
 import { zValidator } from "@hono/zod-validator";
 import { db, eq } from "@realityware/database";
+import { logUser } from "@realityware/database/schema/audit-log";
+import { project } from "@realityware/database/schema/project";
 import { account } from "@realityware/database/schema/user";
+import type { UserInfo } from "@realityware/database/types/user.d";
 import z from "zod";
 import { authMiddleware } from "../../lib/auth";
 import { HonoApp } from "../app";
 
 export const adminUserRouter = HonoApp()
   .get("/", authMiddleware("admin"), async (c) => {
-    const users = await db.select().from(account);
+    const users = (await db.select().from(account)).sort((a, b) => a.id - b.id);
     return c.json({ success: true, users });
   })
   .get(
@@ -21,17 +24,36 @@ export const adminUserRouter = HonoApp()
     ),
     async (c) => {
       const { id } = c.req.valid("param");
-      const user = await db
+      const userData = await db
         .select()
         .from(account)
         .where(eq(account.id, id))
         .then(([user]) => user);
+      const projectData = await db
+        .select()
+        .from(project)
+        .where(eq(project.userId, id));
+      const logData = await db
+        .select()
+        .from(logUser)
+        .where(eq(logUser.userId, id))
+        .catch(() => []);
 
-      if (!user) {
+      if (!userData) {
         return c.json({ success: false, message: "User not found" }, 404);
       }
 
-      return c.json({ success: true, user });
+      return c.json({
+        success: true,
+        user: {
+          ...userData,
+          project: projectData,
+          logs: logData.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          ),
+        } satisfies UserInfo,
+      });
     },
   )
   .patch(
@@ -48,6 +70,9 @@ export const adminUserRouter = HonoApp()
       z.object({
         name: z.string().optional(),
         shards: z.number().optional(),
+        permissions: z
+          .array(z.enum(["member", "reviewer", "fulfillment", "admin"]))
+          .optional(),
       }),
     ),
     async (c) => {
@@ -59,6 +84,7 @@ export const adminUserRouter = HonoApp()
         .set({
           displayName: body.name,
           shards: body.shards,
+          permissions: body.permissions,
         })
         .where(eq(account.id, id))
         .returning()

@@ -9,7 +9,8 @@
     "./migrate": "./src/migrate.ts",
     "./drizzle.config": "./drizzle.config.ts",
     "./supabase/*": "./src/supabase/*.ts",
-    "./schema/*": "./src/schema/*.ts"
+    "./schema/*": "./src/schema/*.ts",
+    "./types/*": "./src/types/*.ts"
   },
   "scripts": {
     "generate": "bun --env-file=../../.env run generate:auth && bun --env-file=../../.env run generate:migrations",
