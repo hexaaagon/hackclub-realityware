@@ -1,12 +1,20 @@
-import Link from "next/link";
+import { Reveal } from "@/components/motion";
+import { FeaturedSection } from "./_components/home/featured-section";
+import { HomeCards } from "./_components/home/home-cards";
+import { HomeHero } from "./_components/home/home-hero";
+import { HomeTutorial } from "./_components/home/home-tutorial";
+import { YourProjectsSection } from "./_components/home/your-projects-section";
 
-export default function Home() {
+export default function DashboardHome() {
   return (
-    <main className="flex flex-col">
-      <h1>this is the dashboard!</h1>
-      <Link href="/debug" className="text-blue-500 underline">
-        go to debug page
-      </Link>
-    </main>
+    <div className="flex flex-col gap-4 lg:gap-6">
+      <HomeHero />
+      <HomeCards />
+      <Reveal>
+        <HomeTutorial />
+      </Reveal>
+      <FeaturedSection />
+      <YourProjectsSection />
+    </div>
   );
 }

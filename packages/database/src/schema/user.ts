@@ -24,4 +24,8 @@ export const account = pgTable("user_account", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   shards: integer("shards").notNull().default(0),
+  // nihad-owned: which city the participant competes for (Leaderboard). The FK
+  // to `city` is declared at the DB level (see manual_migrations/leaderboard.sql)
+  // to avoid a circular import with schema/city.ts.
+  cityId: integer("city_id"),
 }).enableRLS();
