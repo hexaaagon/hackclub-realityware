@@ -177,7 +177,7 @@ export default function AdminProjectsPage() {
   });
 
   return (
-    <main className="@container/main w-full space-y-6">
+    <main className="@container/main w-full space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-2xl tracking-tight">Projects Registry</h2>
       </div>

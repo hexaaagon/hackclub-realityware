@@ -33,10 +33,10 @@ export default function UserPage() {
   const recentProjects = user.project.slice(0, 2);
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       <InformationCards user={user} />
 
-      <div className="grid @[900px]/main:grid-cols-3 grid-cols-1 gap-6">
+      <div className="grid @[900px]/main:grid-cols-3 grid-cols-1 gap-4">
         {/* Profile Details */}
         <Card className="@container/card @[900px]/main:col-span-1">
           <CardHeader>
