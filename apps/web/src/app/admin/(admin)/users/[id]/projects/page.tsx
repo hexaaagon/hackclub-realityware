@@ -1,8 +1,14 @@
 "use client";
 
-import { ArrowSquareOutIcon, GithubLogoIcon } from "@phosphor-icons/react";
+import {
+  ArrowSquareOutIcon,
+  BatteryWarningIcon,
+  GithubLogoIcon,
+  WarningIcon,
+} from "@phosphor-icons/react";
 import { useContext } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,6 +16,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { userContext } from "../context";
 
 export default function UserProjectsPage() {
@@ -24,7 +38,7 @@ export default function UserProjectsPage() {
   }
 
   return (
-    <div className="w-full">
+    <div className="@container/projects w-full">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Projects ({user.project.length})</CardTitle>
@@ -32,11 +46,20 @@ export default function UserProjectsPage() {
         </CardHeader>
         <CardContent>
           {user.project.length === 0 ? (
-            <div className="py-12 text-center text-muted-foreground text-sm">
-              This user hasn't created any projects yet.
+            <div className="pt-4 pb-12 text-center text-muted-foreground text-sm">
+              <Empty>
+                <EmptyHeader>
+                  <EmptyMedia className="size-16!" variant="icon">
+                    <BatteryWarningIcon className="size-12! text-red-600!" />
+                  </EmptyMedia>
+                  <EmptyDescription>
+                    This user haven{"'"}t made any projects yet.
+                  </EmptyDescription>
+                </EmptyHeader>
+              </Empty>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid @[540px]/projects:grid-cols-2 @[840px]/projects:grid-cols-3 grid-cols-1 gap-4">
               {user.project.map((proj) => (
                 <Card
                   key={proj.id}

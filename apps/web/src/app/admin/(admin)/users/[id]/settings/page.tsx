@@ -4,7 +4,6 @@ import { client } from "@realityware/rpc-backend";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,

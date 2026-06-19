@@ -36,8 +36,18 @@ export const adminCrumbs: Bread[] = [
   },
   {
     type: "static",
+    title: "Projects",
+    url: "/admin/users/*/projects",
+  },
+  {
+    type: "static",
     title: "Audit Log",
     url: "/admin/users/*/audit-log",
+  },
+  {
+    type: "static",
+    title: "Settings",
+    url: "/admin/users/*/settings",
   },
 
   // Projects
