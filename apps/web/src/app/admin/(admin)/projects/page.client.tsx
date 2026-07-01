@@ -13,6 +13,8 @@ import {
   ShieldCheckIcon,
   WarningCircleIcon,
 } from "@phosphor-icons/react";
+import type { client } from "@realityware/rpc-backend";
+import type { InferResponseType } from "hono";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,8 +34,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { InferResponseType } from "hono";
-import { client } from "@realityware/rpc-backend";
 
 export default function AdminProjectsPage(
   data: Extract<
@@ -98,8 +98,7 @@ export default function AdminProjectsPage(
       proj.name.toLowerCase().includes(search.toLowerCase()) ||
       proj.description.toLowerCase().includes(search.toLowerCase()) ||
       proj.author.displayName.toLowerCase().includes(search.toLowerCase());
-    const matchesFilter =
-      filterStatus === "all";
+    const matchesFilter = filterStatus === "all";
     return matchesSearch && matchesFilter;
   });
 
@@ -235,11 +234,11 @@ export default function AdminProjectsPage(
                       <div className="flex items-center gap-2">
                         <img
                           src={item.author.avatar}
-                          alt={item.author.name}
+                          alt={item.author.slackId}
                           className="size-5 rounded-full border bg-muted"
                         />
                         <span className="font-medium text-xs">
-                          {item.author.name}
+                          {item.author.slackId}
                         </span>
                       </div>
                     </TableCell>
