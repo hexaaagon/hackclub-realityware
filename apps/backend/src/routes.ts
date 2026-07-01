@@ -1,3 +1,4 @@
+import { adminProjectRouter } from "./admin/projects";
 import { adminUserRouter } from "./admin/users";
 import { HonoApp } from "./app";
 import { authRouter } from "./auth";
@@ -16,6 +17,8 @@ export const router = HonoApp()
   .route("/rsvp", rsvpRouter)
   .route("/user", userRouter)
   .route("/user/projects", userProjectRouter)
+  .route("/admin/users", adminUserRouter)
+  .route("/admin/projects", adminProjectRouter)
   .route("/me", meRouter)
   .route("/shop", shopRouter)
   .route("/bounties", bountyRouter)

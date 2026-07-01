@@ -1,4 +1,4 @@
-import type { account } from "@realityware/database/schema/user";
+import type { UserInfo } from "@realityware/database/types/user.d";
 import { client } from "@realityware/rpc-backend";
 import { headers } from "next/headers";
 import ServerError from "@/app/admin/(partials)/error-pages/server-error";
@@ -26,7 +26,7 @@ export default async function UserLayout({
       }
     | {
         success: true;
-        user: typeof account.$inferSelect;
+        user: UserInfo;
       };
 
   if (!data.success) return <ServerError reason={data} />;

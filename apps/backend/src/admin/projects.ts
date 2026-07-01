@@ -1,17 +1,18 @@
 import { zValidator } from "@hono/zod-validator";
 import { db, eq } from "@realityware/database";
-import { logUser } from "@realityware/database/schema/audit-log";
-import { project } from "@realityware/database/schema/project";
+import { project, projectTypeEnum } from "@realityware/database/schema/project";
 import { account } from "@realityware/database/schema/user";
-import type { UserInfo } from "@realityware/database/types/user.d";
 import z from "zod";
 import { authMiddleware } from "../../lib/auth";
 import { HonoApp } from "../app";
 
-export const adminUserRouter = HonoApp()
+export const adminProjectRouter = HonoApp()
   .get("/", authMiddleware("admin"), async (c) => {
-    const users = (await db.select().from(account)).sort((a, b) => a.id - b.id);
-    return c.json({ success: true, users });
+    const projectData = await Promise.all((await db.select().from(project)).sort((a, b) => a.id - b.id).map(async (data) => {
+      const author = (await db.select().from(account).where(eq(account.id, data.userId)))[0];
+      return { ...data, author };
+    }))
+    return c.json({ success: true, project: projectData });
   })
   .get(
     "/:id",
@@ -24,35 +25,18 @@ export const adminUserRouter = HonoApp()
     ),
     async (c) => {
       const { id } = c.req.valid("param");
-      const userData = await db
-        .select()
-        .from(account)
-        .where(eq(account.id, id))
-        .then(([user]) => user);
       const projectData = await db
         .select()
         .from(project)
-        .where(eq(project.userId, id));
-      const logData = await db
-        .select()
-        .from(logUser)
-        .where(eq(logUser.userId, id))
-        .catch(() => []);
+        .where(eq(project.id, id));
 
-      if (!userData) {
+      if (!projectData) {
         return c.json({ success: false, message: "User not found" }, 404);
       }
 
       return c.json({
         success: true,
-        user: {
-          ...userData,
-          project: projectData,
-          logs: logData.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          ),
-        } satisfies UserInfo,
+        project: projectData,
       });
     },
   )
@@ -68,11 +52,12 @@ export const adminUserRouter = HonoApp()
     zValidator(
       "json",
       z.object({
+        type: z.enum(projectTypeEnum.enumValues).optional(),
         name: z.string().optional(),
-        shards: z.number().optional(),
-        permissions: z
-          .array(z.enum(["member", "reviewer", "fulfillment", "admin"]))
-          .optional(),
+        description: z.string().optional(),
+        codeUrl: z.url().optional(),
+        playableUrl: z.url().optional(),
+        imageUrl: z.url().optional(),
       }),
     ),
     async (c) => {
@@ -80,11 +65,14 @@ export const adminUserRouter = HonoApp()
       const { id } = c.req.valid("param");
 
       const updatedUser = await db
-        .update(account)
+        .update(project)
         .set({
-          displayName: body.name,
-          shards: body.shards,
-          permissions: body.permissions,
+          type: body.type,
+          name: body.name,
+          description: body.description,
+          codeUrl: body.codeUrl,
+          playableUrl: body.playableUrl,
+          imageUrl: body.imageUrl,
         })
         .where(eq(account.id, id))
         .returning()
