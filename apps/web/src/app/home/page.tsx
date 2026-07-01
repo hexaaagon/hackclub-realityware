@@ -18,19 +18,19 @@ const RAILING_LEFT_OFFSET = 96;
 const steps = [
   {
     title: "Identify an Issue",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Identify any real-world issues that needs to be solved.",
   },
   {
     title: "Build a Solution",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Build a solution to the identified issue.",
   },
   {
     title: "Implement it in real life",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Implement the solution in real life.",
   },
   {
     title: "Earn Prizes",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Earn many prizes!!",
   },
 ];
 const faqs: Array<{ q: string; a: string }> = [
@@ -40,30 +40,30 @@ const faqs: Array<{ q: string; a: string }> = [
   },
   {
     q: "What are cities, and how do they work?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "There are 4 seperated cities, Bria, Valdia, Laria, and Mora. Each city has its own members. You can compete with members from your city!",
   },
   {
     q: "How do the grants work?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
-  },
-  {
-    q: "What's Hack Club & Depot17?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "Grants can be obtained by completing projects and earning rewards.",
   },
   {
     q: "What are bounties?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "Each week, bounties are posted as a challenge to complete a project that meets the criteria set by the bounty poster, and earn a reward for completing it.",
+  },
+  {
+    q: "What's Hack Club & Depot17?",
+    a: "Hack Club is a 501(c)(3) nonprofit (EIN: 81-2908499) that helps high school students learn to code and build projects. We're the largest teen-led coding community, with over 50,000 students building projects with their friends each year.",
   },
   {
     q: 'Can I "double dip" with other Hack Club YSWS events?',
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "Sadly no!",
   },
   {
     q: "Who's eligible?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "If you're in the age between 13-18, you are eligible to participate in Hack Club YSWS.",
   },
 ];
-const happening = "Sometimes 1st - Sometimes 1st (2026)";
+const happening = "Sometimes 1st - Sometimes 31th (2026)";
 
 function HRule({
   className,
@@ -260,8 +260,9 @@ export default function Home() {
               <HRule className="my-2" />
               <div className="space-y-4 p-4">
                 {steps.map((step) => (
-                  <div key={step.title}>
+                  <div key={step.title} className="flex gap-2 items-center">
                     <p className="font-bold text-black text-xl">{step.title}</p>
+                    <p className="font-bold text-black text-xl">{"-"}</p>
                     <p className="mt-0.5 text-base leading-snug">{step.desc}</p>
                   </div>
                 ))}
