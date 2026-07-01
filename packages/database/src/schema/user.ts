@@ -24,4 +24,5 @@ export const account = pgTable("user_account", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   shards: integer("shards").notNull().default(0),
+  cityId: integer("city_id"),
 }).enableRLS();
