@@ -13,4 +13,5 @@
   <a href="https://hackclub.enterprise.slack.com/archives/C09QEU276SE" target="_blank">#realityware</a>
 </div>
 
-## more info coming soon
+## What's Hack Club Realityware?
+Hack Club Realityware is another YSWS from Hack Club, the main objective is to solve a real-world problem using technology, and bring it to life. You will get a prize afterwards!
