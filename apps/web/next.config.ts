@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   ],
   experimental: {
     optimizePackageImports: [
-      "@icons-pack/react-simple-icons",
+      "@phosphor-icons/react",
       // "@paper-design/shaders-react",
     ],
   },
@@ -43,6 +43,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.1.*"],
   reactCompiler: true,
   reactStrictMode: true,
+  typedRoutes: true,
 };
 
 // const withMDX = createMDX();

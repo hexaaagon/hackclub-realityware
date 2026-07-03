@@ -11,3 +11,14 @@ export function absoluteUrl(path: string = "/") {
 
   return `${env.NEXT_PUBLIC_APP_URL}${path}`;
 }
+
+export function matchPathname(patternStr: string, currentPathname: string) {
+  const regexPattern = patternStr
+    .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+    .replace(/\/\*$/, "(?:/.*)?")
+    .replace(/\*/g, ".*");
+
+  const regex = new RegExp(`^${regexPattern}$`);
+
+  return regex.test(currentPathname);
+}

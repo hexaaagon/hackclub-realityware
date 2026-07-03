@@ -9,7 +9,8 @@
     "./migrate": "./src/migrate.ts",
     "./drizzle.config": "./drizzle.config.ts",
     "./supabase/*": "./src/supabase/*.ts",
-    "./schema/*": "./src/schema/*.ts"
+    "./schema/*": "./src/schema/*.ts",
+    "./types/*": "./src/types/*.ts"
   },
   "scripts": {
     "generate": "bun --env-file=../../.env run generate:auth && bun --env-file=../../.env run generate:migrations",
@@ -30,14 +31,14 @@
     "@realityware/env": "*",
     "@realityware/shared": "*",
     "@realityware/util": "*",
-    "@supabase/ssr": "^0.10.3",
-    "@supabase/supabase-js": "^2.106.0",
+    "@supabase/ssr": "^0.12.0",
+    "@supabase/supabase-js": "^2.108.1",
     "@t3-oss/env-core": "^0.13.11",
     "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
     "fs-extra": "^11.3.5",
     "glob": "^13.0.6",
-    "next": "^16.2.6",
+    "next": "^16.2.9",
     "postgres": "^3.4.9",
     "zod": "^4.4.3"
   },
@@ -45,7 +46,7 @@
     "@types/bun": "latest",
     "@types/fs-extra": "^11.0.4",
     "drizzle-kit": "^0.31.10",
-    "supabase": "^2.101.0"
+    "supabase": "^2.106.0"
   },
   "peerDependencies": {
     "typescript": "^5"

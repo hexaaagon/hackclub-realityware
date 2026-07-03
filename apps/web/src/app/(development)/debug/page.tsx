@@ -141,8 +141,12 @@ export default function Home() {
           <Link className={buttonVariants()} href="/admin">
             admin dashboard
           </Link>
-          <Button disabled>reviewer dashboard</Button>
-          <Button disabled>fulfilment dashboard</Button>
+          <Link className={buttonVariants()} href="/admin/reviewer">
+            reviewer's dashboard
+          </Link>
+          <Link className={buttonVariants()} href="/admin/fulfillment">
+            fulfillment dashboard
+          </Link>
         </span>
         <Button
           onClick={async () => {

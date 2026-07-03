@@ -3,7 +3,9 @@ import type {
   SlackActionMiddlewareArgs,
   SlackEventMiddlewareArgs,
 } from "@slack/bolt";
-import type { StringIndexed } from "@slack/bolt/dist/types/helpers";
+
+type StringIndexed = { [key: string]: any };
+
 import { glob } from "glob";
 import type { app as slackApp } from "../app/index";
 

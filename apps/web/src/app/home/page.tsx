@@ -11,6 +11,7 @@ import Graffiti from "#/images/graffiti.svg";
 import Depot17Logo from "#/images/logos/depot17.svg";
 import HackClubLogo from "#/images/logos/hackclub.svg";
 import RealitywareFullText from "#/images/logos/realityware_fulltext.svg";
+import { Button } from "@/components/ui/button";
 import ZoomLock from "@/components/zoom-lock";
 
 const RAILING_LEFT_OFFSET = 96;
@@ -18,19 +19,19 @@ const RAILING_LEFT_OFFSET = 96;
 const steps = [
   {
     title: "Identify an Issue",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Identify any real-world issues that needs to be solved.",
   },
   {
     title: "Build a Solution",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Build a solution to the identified issue.",
   },
   {
     title: "Implement it in real life",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Implement the solution in real life.",
   },
   {
     title: "Earn Prizes",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    desc: "Earn many prizes!!",
   },
 ];
 const faqs: Array<{ q: string; a: string }> = [
@@ -40,30 +41,30 @@ const faqs: Array<{ q: string; a: string }> = [
   },
   {
     q: "What are cities, and how do they work?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "There are 4 seperated cities, Bria, Valdia, Laria, and Mora. Each city has its own members. You can compete with members from your city!",
   },
   {
     q: "How do the grants work?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
-  },
-  {
-    q: "What's Hack Club & Depot17?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "Grants can be obtained by completing projects and earning rewards.",
   },
   {
     q: "What are bounties?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "Each week, bounties are posted as a challenge to complete a project that meets the criteria set by the bounty poster, and earn a reward for completing it.",
+  },
+  {
+    q: "What's Hack Club & Depot17?",
+    a: "Hack Club is a 501(c)(3) nonprofit (EIN: 81-2908499) that helps high school students learn to code and build projects. We're the largest teen-led coding community, with over 50,000 students building projects with their friends each year.",
   },
   {
     q: 'Can I "double dip" with other Hack Club YSWS events?',
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "Sadly no!",
   },
   {
     q: "Who's eligible?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius a nisl nec iaculis.",
+    a: "If you're in the age between 13-18, you are eligible to participate in Hack Club YSWS.",
   },
 ];
-const happening = "Sometimes 1st - Sometimes 1st (2026)";
+const happening = "Sometimes 1st - Sometimes 31th (2026)";
 
 function HRule({
   className,
@@ -85,7 +86,11 @@ function HRule({
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number>(0);
+  const [openToast, setOpenToast] = useState(false);
   const [email, setEmail] = useState("");
+
+  const signupAccessDisabled =
+    env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED === "true";
 
   return (
     <>
@@ -100,6 +105,59 @@ export default function Home() {
         className="noise flex min-h-[calc(100dvh/var(--zoom-scale,1))] w-full flex-col overflow-x-hidden p-8"
         id="zoom-wrapper"
       >
+        {signupAccessDisabled && (
+          <div className="fixed top-2 right-2 z-50 flex flex-col items-end justify-end">
+            <Button onClick={() => setOpenToast((bool) => !bool)}>
+              Login to Dashboard
+            </Button>
+            {openToast && (
+              <form
+                className="flex w-fit items-center gap-2 pt-1"
+                onSubmit={(e) => {
+                  e.preventDefault();
+
+                  toast.promise(
+                    authClient.signIn.oauth2({
+                      providerId: "hca",
+                      additionalData: {
+                        login_hint: email,
+                        anon_id: posthog.get_distinct_id(),
+                      },
+                    }),
+                    {
+                      loading: "Redirecting to Hack Club Auth...",
+                      success: (m) => {
+                        if (m.error) {
+                          return `Failed to redirect: ${m.error.message}`;
+                        } else
+                          return "Redirected! Please complete sign in to continue.";
+                      },
+                      error: "Failed to redirect. Please try again.",
+                    },
+                  );
+                }}
+              >
+                <div className="flex h-8 items-center gap-2 rounded-xs border-2 border-black bg-white/50 px-4">
+                  <EnvelopeIcon size={16} />
+                  <input
+                    type="email"
+                    placeholder="me@hexaa.sh"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-full w-full bg-transparent text-sm placeholder-black/35 outline-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="h-8 whitespace-nowrap rounded-xs border bg-orange px-4 font-medium text-sm uppercase transition-colors"
+                >
+                  LOGIN
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+
         <div className="absolute top-0 left-0 z-10 size-[33.5px] border-black/20 border-r-2 border-b-2" />
         <div className="absolute top-0 right-0 z-10 size-[33.5px] border-black/20 border-b-2 border-l-2" />
         <div className="absolute bottom-0 left-0 z-10 size-[33.5px] border-black/20 border-t-2 border-r-2" />
@@ -107,7 +165,7 @@ export default function Home() {
         <div className="relative overflow-hidden border-2 border-black/20 bg-background font-sans tracking-tight">
           <div
             aria-hidden
-            className="*:-ml-20 pointer-events-none absolute inset-y-0 hidden border-black/20 border-l-2 leading-20 *:text-black/40 lg:block"
+            className="pointer-events-none absolute inset-y-0 hidden border-black/20 border-l-2 leading-20 *:-ml-20 *:text-black/40 lg:block"
             style={{
               width: `calc(100% - ${RAILING_LEFT_OFFSET * 2}px)`,
               left: "50%",
@@ -149,7 +207,7 @@ export default function Home() {
                 viewBox="0 0 164 197"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="-top-0.5 -right-0.5 absolute h-[calc(186px*0.88)] w-[calc(197px*0.88)] [@media(width>=2048px)]:h-[calc(186px*1.1)] [@media(width>=2048px)]:w-[calc(197px*1.1)]"
+                className="absolute -top-0.5 -right-0.5 h-[calc(186px*0.88)] w-[calc(197px*0.88)] [@media(width>=2048px)]:h-[calc(186px*1.1)] [@media(width>=2048px)]:w-[calc(197px*1.1)]"
               >
                 <path
                   d="M149 103C149 133.928 123.928 159 93 159C62.0721 159 37 133.928 37 103M149 103V1H37V31.001V103M149 103H93H37M149 103L185 104M37 103H1M185 104C185 154.81 143.81 196 93 196C42.1898 196 1 153.81 1 103M185 104V1H1V103M1 103V196"
@@ -194,29 +252,7 @@ export default function Home() {
                     return;
                   }
 
-                  if (env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED === "true") {
-                    window.location.href = `${env.NEXT_PUBLIC_APP_URL}/api/rsvp?email=${encodeURIComponent(email)}&anon_id=${encodeURIComponent(posthog.get_distinct_id())}`;
-                  } else {
-                    toast.promise(
-                      authClient.signIn.oauth2({
-                        providerId: "hca",
-                        additionalData: {
-                          login_hint: email,
-                          anon_id: posthog.get_distinct_id(),
-                        },
-                      }),
-                      {
-                        loading: "Redirecting to Hack Club Auth...",
-                        success: (m) => {
-                          if (m.error) {
-                            return `Failed to redirect: ${m.error.message}`;
-                          } else
-                            return "Redirected! Please complete sign in to continue.";
-                        },
-                        error: "Failed to redirect. Please try again.",
-                      },
-                    );
-                  }
+                  window.location.href = `${env.NEXT_PUBLIC_APP_URL}/api/rsvp?email=${encodeURIComponent(email)}&anon_id=${encodeURIComponent(posthog.get_distinct_id())}`;
                 }}
               >
                 <div className="flex h-12 items-center gap-2 rounded-xs border-2 border-black bg-white/50 px-4">
@@ -233,9 +269,7 @@ export default function Home() {
                   type="submit"
                   className="h-12 whitespace-nowrap rounded-xs border bg-orange px-4 font-medium text-lg uppercase transition-colors"
                 >
-                  {env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED === "true"
-                    ? "RSVP NOW"
-                    : "ENTER"}
+                  {signupAccessDisabled ? "RSVP NOW" : "ENTER"}
                 </button>
               </form>
               <p className="pt-1 text-md">
@@ -244,12 +278,12 @@ export default function Home() {
             </div>
             <Image
               src={Graffiti}
-              className="-bottom-1/2 pointer-events-none absolute right-0 h-100 w-auto opacity-50"
+              className="pointer-events-none absolute right-0 -bottom-1/2 h-100 w-auto opacity-50"
               alt="Grafitti"
             />
           </section>
 
-          <section className="-mt-px relative border-black/20 border-t-2">
+          <section className="relative -mt-px border-black/20 border-t-2">
             <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] pt-2 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
               <div className="flex items-center gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black bg-white text-base">
@@ -260,8 +294,9 @@ export default function Home() {
               <HRule className="my-2" />
               <div className="space-y-4 p-4">
                 {steps.map((step) => (
-                  <div key={step.title}>
+                  <div key={step.title} className="flex items-center gap-2">
                     <p className="font-bold text-black text-xl">{step.title}</p>
+                    <p className="font-bold text-black text-xl">{"-"}</p>
                     <p className="mt-0.5 text-base leading-snug">{step.desc}</p>
                   </div>
                 ))}
@@ -269,7 +304,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="-mt-px relative border-black/20 border-t-2">
+          <section className="relative -mt-px border-black/20 border-t-2">
             <div className="relative mx-auto w-full border-black/20 px-[max(20px,7.5vw)] py-2 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
               <div className="flex items-center gap-3">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-black bg-white text-base">
@@ -313,7 +348,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section className="-mt-px relative border-black/20 border-y-2">
+          <section className="relative -mt-px border-black/20 border-y-2">
             <div className="relative mx-auto w-full border-black/20 px-2 pt-4 pb-2 lg:max-w-[calc(8/12*100%+3px)] [@media(width>=1410px)]:border-x-2">
               <p className="text-right font-semibold text-lg leading-6">
                 MORE QUESTIONS? <br />

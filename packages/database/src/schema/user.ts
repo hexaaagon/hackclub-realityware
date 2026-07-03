@@ -1,6 +1,7 @@
 import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
+export type UserPermission = (typeof userPermissionEnum.enumValues)[number];
 export const userPermissionEnum = pgEnum("user_permissions", [
   "member",
   "reviewer",
@@ -23,4 +24,5 @@ export const account = pgTable("user_account", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   shards: integer("shards").notNull().default(0),
+  cityId: integer("city_id"),
 }).enableRLS();

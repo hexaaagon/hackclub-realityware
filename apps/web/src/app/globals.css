@@ -96,6 +96,71 @@
   --font-heading: var(--font-sans);
 }
 
+/* Playful motion utilities — keyframe-backed `animate-*` utilities, registered
+   via the --animate-* convention (same mechanism as the accordion above).
+   NOTE: do NOT redeclare --animate-pulse (owned by Tailwind core / ui/skeleton). */
+@theme {
+  --animate-marquee: marquee var(--marquee-duration, 20s) linear infinite;
+  --animate-marquee-reverse: marquee-reverse var(--marquee-duration, 20s) linear
+    infinite;
+  --animate-wiggle: wiggle 0.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes marquee-reverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+}
+
 /* Light theme */
 :root {
   --background: oklch(0.9463 0.0103 247.94);
@@ -121,7 +186,11 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0;
+  --radius: 0px;
+  /* motion duration tokens — mirror of components/motion/tokens.ts */
+  --duration-fast: 0.15s;
+  --duration-base: 0.25s;
+  --duration-slow: 0.45s;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -265,4 +334,16 @@
   opacity: 0.1;
   background-repeat: repeat;
   background-size: 20px 20px;
+}
+
+/* Accessibility: near-disable CSS-driven motion when the user prefers reduced
+   motion. Backstops the JS useReducedMotion() guards in components/motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
