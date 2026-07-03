@@ -28,7 +28,7 @@ export function NavBody({ items }: { items: NavSection }) {
                 variant={isActive ? "outline" : "default"}
                 asChild
               >
-                <Link href={cleanUrl} className="flex items-center">
+                <Link href={cleanUrl as any} className="flex items-center">
                   {item.icon && <item.icon size={20} className="size-5!" />}
                   <span>{item.title}</span>
                 </Link>

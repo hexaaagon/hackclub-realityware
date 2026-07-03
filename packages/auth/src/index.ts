@@ -41,22 +41,6 @@ export const auth = betterAuth({
             message: "Missing or invalid login_hint",
           });
         }
-
-        // rsvp thing i supposed
-        if (env.NEXT_PUBLIC_SIGNUP_ACCESS_DISABLED) {
-          if (
-            (loginHint || "").startsWith(env.SIGNUP_ACCESS_BYPASS_PREFIX || "")
-          ) {
-            ctx.body.login_hint = loginHint.replace(
-              env.SIGNUP_ACCESS_BYPASS_PREFIX || "",
-              "",
-            );
-          } else {
-            throw new APIError("UNAUTHORIZED", {
-              message: "what are u doing lil bro",
-            });
-          }
-        }
       }
     }),
     after: createAuthMiddleware(async (ctx) => {
