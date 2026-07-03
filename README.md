@@ -34,6 +34,13 @@ packages:
   - util: A shared utility package used across the monorepo.
 ```
 
+## Development
+See these guide to start:
+- [Web & Backend](https://github.com/hexaaagon/hackclub-realityware/blob/main/apps/web/README.md)
+- [Slack Bot](https://github.com/hexaaagon/hackclub-realityware/blob/main/apps/bot/README.md)
+
+*Both of the app needs to be setted up.
+
 ## AI Usage
 AI was used to help hexaa to debug and fix errors.
 
