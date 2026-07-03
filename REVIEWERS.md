@@ -28,7 +28,7 @@ https://www.figma.com/design/axz058rPIHnAZgBv7Ge4OQ/Realityware?node-id=1692-524
 
 ## Hours Calculation
 
-![Hackatime](./github/assets/Hackatime.png)
+![Hackatime](./.github/assets/Hackatime.png)
 
 The total hours worked on this project (at the time of writing this, July 1 2026):
 ```
@@ -41,9 +41,9 @@ The total hours worked on this project (at the time of writing this, July 1 2026
 
 # Prohibited Pages
 
-![Users Page](./github/assets/users-page.png)
+![Users Page](./.github/assets/users-page.png)
 
-![Projects Page](./github/assets/projects-page.png)
+![Projects Page](./.github/assets/projects-page.png)
 
 # Note
 
